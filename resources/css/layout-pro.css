@@ -1,0 +1,1081 @@
+/* Pelican Server Layout Pro Styles */
+
+/* 1. Global SVG dimension constraint */
+.fi-console-page svg,
+.pelican-unified-server-header svg,
+.fi-wi svg {
+    max-width: 18px !important;
+    max-height: 18px !important;
+}
+
+/* 2. Hide redundant standard Overview widget and native header */
+.fi-wi-stats-overview,
+.fi-wi-widget:has(.fi-wi-stats-overview),
+.fi-console-page .fi-wi-stats-overview,
+.fi-console-page [wire\:name*="ServerPlayerWidget"],
+.fi-console-page [wire\:name*="ServerOverview"],
+.fi-console-page div:has(.fi-wi-stats-overview),
+.fi-console-page .fi-header {
+    display: none !important;
+}
+
+/* 3. Hide Left Sidebar on Server Panel for modern fluid experience */
+body.pelican-hide-sidebar .fi-sidebar,
+body.pelican-hide-sidebar .fi-main-sidebar,
+body.pelican-hide-sidebar .fi-sidebar-close-overlay,
+body.pelican-hide-sidebar .fi-topbar-open-sidebar-btn,
+body.pelican-hide-sidebar button[aria-label*="sidebar"],
+body.pelican-hide-sidebar button[title*="sidebar"] {
+    display: none !important;
+}
+
+body.pelican-hide-sidebar .fi-layout {
+    display: block !important;
+}
+
+body.pelican-hide-sidebar .fi-main-ctn {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-inline-start: 0 !important;
+    padding-inline-start: 0 !important;
+}
+
+body.pelican-hide-sidebar .fi-main {
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+body.pelican-hide-sidebar .fi-topbar {
+    inset-inline-start: 0 !important;
+    width: 100% !important;
+}
+
+/* Full Width Fluid Content Container */
+.fi-console-page,
+.fi-console-page .fi-page-header-main-ctn,
+.fi-console-page .fi-page-main,
+.fi-console-page .fi-page-content {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.fi-console-page .fi-page-content > div:not(.fi-wi) {
+    display: none !important;
+}
+
+.fi-console-page .fi-page-content > .fi-wi.fi-grid {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* 4. Top Header Navigation Widget */
+.fi-wi-server-layout-pro-header,
+.fi-wi-widget:has(.pelican-unified-server-header) {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    margin-bottom: 12px !important;
+}
+
+.pelican-unified-server-header {
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.push-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.push-identity {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.push-top-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Server Selector Dropdown */
+.push-server-select-wrap {
+    position: relative;
+    display: inline-block;
+}
+
+.push-server-select-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 5px 11px;
+    color: #f8fafc;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.push-server-select-btn:hover {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: #38bdf8;
+}
+
+.push-server-name {
+    color: #f8fafc;
+}
+
+.push-server-chevron {
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.push-status-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.push-status-dot.online {
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+}
+.push-status-dot.starting {
+    background: #f59e0b;
+    box-shadow: 0 0 8px #f59e0b;
+}
+.push-status-dot.offline {
+    background: #ef4444;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.7);
+}
+
+.push-server-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: 99999;
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75);
+    min-width: 320px;
+    max-width: 380px;
+    padding: 6px;
+}
+
+.push-dropdown-header {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 6px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.push-dropdown-scrollable {
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 2px;
+}
+
+.push-dropdown-node-group {
+    margin-top: 8px;
+    padding-bottom: 4px;
+}
+
+.push-dropdown-node-group:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.push-dropdown-node-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 8px;
+    margin-bottom: 3px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.push-node-badge {
+    font-size: 11px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.push-node-count {
+    font-size: 10.5px;
+    color: #64748b;
+}
+
+.push-dropdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.push-server-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 6px;
+    color: #e2e8f0;
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.12s ease;
+}
+
+.push-server-dropdown-item:hover {
+    background: rgba(56, 189, 248, 0.12);
+    color: #38bdf8;
+}
+
+.push-server-dropdown-item.active {
+    background: rgba(56, 189, 248, 0.18);
+    color: #38bdf8;
+    font-weight: 600;
+}
+
+.push-server-item-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.push-server-item-dot.online { 
+    background: #10b981; 
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.7); 
+}
+.push-server-item-dot.starting { 
+    background: #f59e0b; 
+    box-shadow: 0 0 6px rgba(245, 158, 11, 0.7); 
+}
+.push-server-item-dot.offline { 
+    background: #ef4444; 
+    box-shadow: 0 0 6px rgba(239, 68, 68, 0.6); 
+}
+
+.push-server-item-name {
+    font-weight: 500;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.push-server-item-ip {
+    font-size: 10.5px;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    color: #64748b;
+}
+
+.push-server-item-badge {
+    font-size: 10px;
+    background: #0284c7;
+    color: #ffffff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+/* Chips & Identity Elements */
+.push-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 4px 9px;
+    font-size: 12px;
+    color: #cbd5e1;
+    line-height: 1.2;
+    transition: all 0.15s ease;
+}
+
+.push-chip-icon {
+    font-size: 13px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.push-svg-icon {
+    width: 14px;
+    height: 14px;
+    stroke-width: 2;
+    stroke: currentColor;
+    fill: none;
+    vertical-align: middle;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.push-svg-icon-sm {
+    width: 12px;
+    height: 12px;
+    stroke-width: 2;
+    stroke: currentColor;
+    fill: none;
+    vertical-align: middle;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.push-svg-modal {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2;
+    stroke: #38bdf8;
+    fill: none;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.push-node-badge .push-svg-icon {
+    width: 13px;
+    height: 13px;
+    margin-right: 4px;
+    vertical-align: -2px;
+}
+
+.push-empty-svg-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    margin-bottom: 12px;
+}
+
+.push-empty-svg {
+    width: 28px;
+    height: 28px;
+    stroke: #64748b;
+    fill: none;
+}
+
+.push-copy-ip {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    color: #38bdf8;
+    cursor: pointer;
+}
+.push-copy-ip:hover {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: #38bdf8;
+}
+
+.push-node-chip {
+    background: rgba(15, 23, 42, 0.5);
+    color: #94a3b8;
+}
+
+.push-map-chip {
+    background: rgba(30, 41, 59, 0.55);
+    color: #e2e8f0;
+    font-weight: 500;
+}
+
+/* Interactive Players Button Chip */
+.push-players-chip {
+    cursor: pointer;
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #f59e0b;
+    font-weight: 600;
+}
+
+.push-players-chip:hover {
+    background: rgba(245, 158, 11, 0.22);
+    border-color: #f59e0b;
+    color: #fbbf24;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
+}
+
+/* Players Modal Window */
+.push-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.push-modal-window {
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 620px;
+    max-height: 82vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.85);
+    overflow: hidden;
+    animation: pushModalFadeIn 0.18s ease-out;
+}
+
+@keyframes pushModalFadeIn {
+    from { opacity: 0; transform: scale(0.96) translateY(-8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.push-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(15, 23, 42, 0.9);
+}
+
+.push-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.push-modal-icon {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.push-modal-title h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #f8fafc;
+}
+
+.push-modal-subtitle {
+    margin-top: 3px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.push-modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.push-modal-refresh-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    color: #cbd5e1;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.push-modal-refresh-btn:hover {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: #38bdf8;
+    color: #38bdf8;
+}
+
+.push-modal-close-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 4px;
+    transition: color 0.15s ease;
+}
+
+.push-modal-close-btn:hover {
+    color: #f8fafc;
+}
+
+.push-modal-body {
+    padding: 16px 18px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.push-modal-table-wrap {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.push-modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    text-align: left;
+}
+
+.push-modal-table th {
+    background: rgba(30, 41, 59, 0.7);
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 9px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.push-modal-table td {
+    padding: 8px 12px;
+    color: #e2e8f0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.push-modal-table tr:hover td {
+    background: rgba(56, 189, 248, 0.06);
+}
+
+.push-td-muted {
+    color: #64748b !important;
+    font-size: 12px;
+}
+
+.push-td-name {
+    font-weight: 600;
+    color: #f8fafc;
+}
+
+.push-td-frags {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    color: #10b981;
+    font-weight: 700;
+}
+
+.push-td-time {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.push-modal-footer-stats {
+    margin-top: 12px;
+    font-size: 12.5px;
+    color: #94a3b8;
+    text-align: right;
+}
+
+.push-modal-footer-stats strong {
+    color: #f59e0b;
+}
+
+.push-modal-empty {
+    text-align: center;
+    padding: 36px 16px;
+    color: #94a3b8;
+}
+
+.push-empty-emoji {
+    font-size: 38px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.push-modal-empty h4 {
+    margin: 0 0 6px 0;
+    color: #f1f5f9;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.push-modal-empty p {
+    margin: 0;
+    font-size: 12.5px;
+    color: #64748b;
+}
+
+/* Resources Mini Indicators */
+.push-resources {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 3px 12px;
+}
+
+.push-res-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+}
+
+.push-res-label {
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.push-res-val {
+    color: #38bdf8;
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-weight: 600;
+}
+
+/* Power Action Buttons mounted in top row */
+.push-nav-power-actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.push-nav-power-actions .fi-btn-group {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.push-nav-power-actions .fi-btn {
+    padding: 4px 12px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    min-height: 30px !important;
+    height: 30px !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    width: auto !important;
+    min-width: max-content !important;
+}
+
+.push-nav-power-actions .fi-btn-label {
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 4px !important;
+}
+
+.push-nav-power-actions .fi-btn svg {
+    width: 13px !important;
+    height: 13px !important;
+    margin-right: 4px !important;
+    flex-shrink: 0 !important;
+}
+
+.push-nav-power-actions .pelican-btn-uptime {
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    opacity: 0.9 !important;
+    margin-left: 2px !important;
+    white-space: nowrap !important;
+    display: inline !important;
+}
+
+/* Bottom Nav Row: Tabs ONLY */
+.push-nav-row {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 6px;
+    overflow-x: auto;
+}
+
+.push-nav-tabs {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.push-nav-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.push-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #94a3b8;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    background: transparent;
+    white-space: nowrap;
+}
+
+.push-nav-link:hover {
+    color: #e2e8f0;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.push-nav-link.active {
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.12);
+    font-weight: 600;
+}
+
+.push-nav-badge {
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+}
+
+/* 5. Two-Column Modern Grid (Strictly Aligned) */
+@media (min-width: 1024px) {
+    .fi-console-page .fi-wi.fi-grid,
+    .fi-wi.fi-grid {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) 365px !important;
+        grid-auto-flow: dense !important;
+        gap: 12px !important;
+        align-items: start !important;
+    }
+
+    /* Top Nav Header spans both columns */
+    .fi-console-page .fi-wi.fi-grid > .fi-wi-server-layout-pro-header,
+    .fi-console-page .fi-wi.fi-grid > div:has(.pelican-unified-server-header),
+    .fi-wi.fi-grid > .fi-wi-server-layout-pro-header,
+    .fi-wi.fi-grid > div:has(.pelican-unified-server-header) {
+        grid-column: 1 / -1 !important;
+        grid-row: auto !important;
+        width: 100% !important;
+    }
+
+    /* Terminal on Left Column */
+    .fi-console-page .fi-wi.fi-grid > div:has(#terminal),
+    .fi-console-page .fi-wi.fi-grid > div[wire\:id]:has(#terminal),
+    .fi-console-page .fi-wi.fi-grid > div[wire\:name*="ServerConsole"],
+    .fi-console-page .fi-wi-widget:has(#terminal) {
+        grid-column: 1 !important;
+        grid-row: span 3 !important;
+        min-height: 630px !important;
+        height: 630px !important;
+        max-height: 630px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+    }
+
+    .fi-console-page #terminal {
+        flex: 1 !important;
+        min-height: 500px !important;
+        height: 100% !important;
+    }
+
+    /* 3 Side Charts on Right (Order 1, 2, 3) - permanently locked by wire:name and classes */
+    .fi-console-page .fi-wi.fi-grid > [wire\:name*="ServerCpuChart"],
+    .fi-console-page .fi-wi.fi-grid > .pelican-side-chart-1:not(.fi-wi-stats-overview) {
+        grid-column: 2 !important;
+        order: 1 !important;
+        height: 202px !important;
+        max-height: 202px !important;
+        min-height: 202px !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .fi-console-page .fi-wi.fi-grid > [wire\:name*="ServerMemoryChart"],
+    .fi-console-page .fi-wi.fi-grid > .pelican-side-chart-2:not(.fi-wi-stats-overview) {
+        grid-column: 2 !important;
+        order: 2 !important;
+        height: 202px !important;
+        max-height: 202px !important;
+        min-height: 202px !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .fi-console-page .fi-wi.fi-grid > [wire\:name*="server-players-chart"],
+    .fi-console-page .fi-wi.fi-grid > .pelican-side-chart-3:not(.fi-wi-stats-overview) {
+        grid-column: 2 !important;
+        order: 3 !important;
+        height: 202px !important;
+        max-height: 202px !important;
+        min-height: 202px !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* Bottom Charts Row (e.g. Network, Disk) below terminal and side charts */
+    .pelican-bottom-charts-row {
+        grid-column: 1 / -1 !important;
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)) !important;
+        gap: 12px !important;
+        width: 100% !important;
+        margin-top: 4px !important;
+    }
+
+    .pelican-bottom-charts-row > div,
+    .pelican-bottom-charts-row .fi-wi-chart {
+        height: 202px !important;
+        min-height: 202px !important;
+        max-height: 202px !important;
+    }
+}
+
+/* Universal Chart Card Styling (Matches Reference Screenshot Exactly) */
+.fi-console-page .fi-wi-chart .fi-section,
+.fi-console-page .fi-section:has(canvas),
+.pelican-side-chart-1:not(.fi-wi-stats-overview) .fi-section,
+.pelican-side-chart-2:not(.fi-wi-stats-overview) .fi-section,
+.pelican-side-chart-3:not(.fi-wi-stats-overview) .fi-section,
+.pelican-bottom-charts-row .fi-section {
+    background-color: #18191e !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    padding: 0 !important;
+    position: relative !important;
+}
+
+/* Header: Standard Flow, White Bold Heading, Thin Divider */
+.fi-console-page .fi-wi-chart .fi-section-header,
+.fi-console-page .fi-section:has(canvas) .fi-section-header,
+.pelican-side-chart-1:not(.fi-wi-stats-overview) .fi-section-header,
+.pelican-side-chart-2:not(.fi-wi-stats-overview) .fi-section-header,
+.pelican-side-chart-3:not(.fi-wi-stats-overview) .fi-section-header,
+.pelican-bottom-charts-row .fi-section-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 10px 14px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    background: transparent !important;
+    position: relative !important;
+    z-index: 1 !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    max-height: 42px !important;
+    box-sizing: border-box !important;
+}
+
+.fi-console-page .fi-wi-chart .fi-section-header-heading,
+.fi-console-page .fi-section:has(canvas) .fi-section-header-heading,
+.pelican-side-chart-1:not(.fi-wi-stats-overview) .fi-section-header-heading,
+.pelican-side-chart-2:not(.fi-wi-stats-overview) .fi-section-header-heading,
+.pelican-side-chart-3:not(.fi-wi-stats-overview) .fi-section-header-heading,
+.pelican-bottom-charts-row .fi-section-header-heading {
+    color: #ffffff !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em !important;
+    text-transform: none !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+}
+
+/* Expand Action Button in Chart Header */
+.fi-console-page .fi-wi-chart .fi-section-header-actions button,
+.fi-console-page .fi-section:has(canvas) .fi-section-header-actions button,
+.pelican-side-chart-1:not(.fi-wi-stats-overview) .fi-section-header-actions button,
+.pelican-side-chart-2:not(.fi-wi-stats-overview) .fi-section-header-actions button,
+.pelican-side-chart-3:not(.fi-wi-stats-overview) .fi-section-header-actions button,
+.pelican-bottom-charts-row .fi-section-header-actions button {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 6px !important;
+    padding: 5px !important;
+    color: #94a3b8 !important;
+    transition: all 0.15s ease !important;
+}
+
+.fi-console-page .fi-wi-chart .fi-section-header-actions button:hover,
+.fi-console-page .fi-section:has(canvas) .fi-section-header-actions button:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+}
+
+/* Section Content Container */
+.fi-console-page .fi-wi-chart .fi-section-content-ctn,
+.fi-console-page .fi-section:has(canvas) .fi-section-content-ctn,
+.pelican-side-chart-1 .fi-section-content-ctn,
+.pelican-side-chart-2 .fi-section-content-ctn,
+.pelican-side-chart-3 .fi-section-content-ctn,
+.pelican-bottom-charts-row .fi-section-content-ctn {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: calc(202px - 42px) !important;
+    max-height: calc(202px - 42px) !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Full Width & Height Content Body without Margins */
+.fi-console-page .fi-wi-chart .fi-section-content,
+.fi-console-page .fi-section:has(canvas) .fi-section-content,
+.pelican-side-chart-1:not(.fi-wi-stats-overview) .fi-section-content,
+.pelican-side-chart-2:not(.fi-wi-stats-overview) .fi-section-content,
+.pelican-side-chart-3:not(.fi-wi-stats-overview) .fi-section-content,
+.pelican-bottom-charts-row .fi-section-content {
+    flex: 1 1 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: stretch !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    position: relative !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    width: 100% !important;
+    overflow: hidden !important;
+}
+
+/* Inner Wrappers (wire:poll div, etc.) */
+.fi-console-page .fi-wi-chart .fi-section-content > div,
+.fi-console-page .fi-section:has(canvas) .fi-section-content > div,
+.pelican-side-chart-1 .fi-section-content > div,
+.pelican-side-chart-2 .fi-section-content > div,
+.pelican-side-chart-3 .fi-section-content > div,
+.pelican-bottom-charts-row .fi-section-content > div {
+    flex: 1 1 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: stretch !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Canvas Container */
+.fi-console-page .fi-wi-chart .fi-wi-chart-canvas-ctn,
+.fi-console-page .fi-wi-chart .fi-wi-chart-frame,
+.fi-console-page .fi-section:has(canvas) .fi-wi-chart-canvas-ctn,
+.pelican-side-chart-1 .fi-wi-chart-canvas-ctn,
+.pelican-side-chart-2 .fi-wi-chart-canvas-ctn,
+.pelican-side-chart-3 .fi-wi-chart-canvas-ctn,
+.pelican-bottom-charts-row .fi-wi-chart-canvas-ctn {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    display: block !important;
+    position: relative !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Canvas Element */
+.fi-console-page .fi-wi-chart canvas,
+.fi-console-page .fi-section:has(canvas) canvas,
+.pelican-side-chart-1:not(.fi-wi-stats-overview) canvas,
+.pelican-side-chart-2:not(.fi-wi-stats-overview) canvas,
+.pelican-side-chart-3:not(.fi-wi-stats-overview) canvas,
+.pelican-bottom-charts-row canvas {
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Heading value in charts matches heading color */
+.pelican-chart-live-val {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    margin-left: 3px !important;
+    font-family: inherit !important;
+}
+
+/* 7. Bottom Charts Row (Network & Disk) */
+.pelican-bottom-charts-row {
+    grid-column: 1 / -1 !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+    width: 100% !important;
+    margin-top: 14px !important;
+}
+
+@media (max-width: 1024px) {
+    .pelican-bottom-charts-row {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+.pelican-bottom-charts-row > div {
+    width: 100% !important;
+    min-height: 220px !important;
+}
+
+.pelican-bottom-charts-row .fi-section-content {
+    min-height: 160px !important;
+    height: 160px !important;
+}
+

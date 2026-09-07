@@ -1,0 +1,19 @@
+{
+    "id": "pelican-server-layout-pro",
+    "name": "Pelican Server Layout Pro",
+    "author": "MrPanica",
+    "version": "1.0.2",
+    "description": "Ergonomic 2-column server layout designed for Source Engine game servers on Pelican Panel: Console on left, customizable 3 charts on right, widescreen bottom charts, unified navigation with live A2S player query and instant server switching.",
+    "category": "plugin",
+    "url": "https://github.com/MrPanica/pelican-server-layout-pro",
+    "namespace": "Artur\\PelicanServerLayoutPro",
+    "class": "PelicanServerLayoutProPlugin",
+    "panels": [
+        "admin",
+        "server"
+    ],
+    "meta": {
+        "status": "enabled",
+        "status_message": null
+    }
+}
