@@ -8,7 +8,7 @@
             <div class="push-identity">
                 <!-- Dropdown server selector with Alpine.js -->
                 <div class="push-server-select-wrap" @click.outside="open = false">
-                    <button type="button" class="push-server-select-btn" @click="open = !open" title="Переключить сервер">
+                    <button type="button" class="push-server-select-btn" @click="open = !open" title="{{ __('server-layout-pro::messages.switch_server') }}">
                         <span class="push-status-dot {{ $serverStatus === 'online' ? 'online' : ($serverStatus === 'starting' ? 'starting' : 'offline') }}" id="pelican-server-status-dot"></span>
                         <span class="push-server-name">{{ $server?->name }}</span>
                         <span class="push-server-chevron">▾</span>
@@ -16,7 +16,7 @@
                     @if(!empty($serversByNode) && count($serversByNode) > 0)
                         <div class="push-server-dropdown-menu" x-show="open" x-cloak style="display: none;">
                             <div class="push-dropdown-header">
-                                <span>Доступные серверы ({{ count($accessibleServers) }})</span>
+                                <span>{{ __('server-layout-pro::messages.available_servers') }} ({{ count($accessibleServers) }})</span>
                             </div>
                             <div class="push-dropdown-scrollable">
                                 @foreach($serversByNode as $nodeGroup)
@@ -24,9 +24,9 @@
                                         <div class="push-dropdown-node-header">
                                             <span class="push-node-badge">
                                                 <svg class="push-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
-                                                Нода: {{ $nodeGroup['name'] }}
+                                                {{ __('server-layout-pro::messages.node') }}: {{ $nodeGroup['name'] }}
                                             </span>
-                                            <span class="push-node-count">{{ count($nodeGroup['servers']) }} серв.</span>
+                                            <span class="push-node-count">{{ count($nodeGroup['servers']) }} {{ __('server-layout-pro::messages.servers_abbr') }}</span>
                                         </div>
                                         <div class="push-dropdown-list">
                                             @foreach($nodeGroup['servers'] as $s)
@@ -39,7 +39,7 @@
                                                         <span class="push-server-item-ip">{{ $s['ip'] }}</span>
                                                     @endif
                                                     @if($s['is_current'])
-                                                        <span class="push-server-item-badge">Текущий</span>
+                                                        <span class="push-server-item-badge">{{ __('server-layout-pro::messages.current') }}</span>
                                                     @endif
                                                 </a>
                                             @endforeach
@@ -53,7 +53,7 @@
 
                 <!-- IP Chip with Copy -->
                 @if($ip)
-                    <button type="button" class="push-chip push-copy-ip" data-copy="{{ $ip }}" title="Нажмите для копирования IP">
+                    <button type="button" class="push-chip push-copy-ip" data-copy="{{ $ip }}" title="{{ __('server-layout-pro::messages.click_copy_ip') }}">
                         <span class="push-chip-icon">
                             <svg class="push-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" x2="22" y1="12" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                         </span>
@@ -66,7 +66,7 @@
 
                 <!-- Node Chip with Icon and Label -->
                 @if(!empty($nodeName))
-                    <span class="push-chip push-node-chip" title="Нода сервера: {{ $nodeName }}">
+                    <span class="push-chip push-node-chip" title="{{ __('server-layout-pro::messages.server_node') }}: {{ $nodeName }}">
                         <span class="push-chip-icon">
                             <svg class="push-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
                         </span>
@@ -76,7 +76,7 @@
 
                 <!-- Current Map Chip -->
                 @if(!empty($currentMap) && $currentMap !== '—')
-                    <span class="push-chip push-map-chip" title="Текущая карта: {{ $currentMap }}">
+                    <span class="push-chip push-map-chip" title="{{ __('server-layout-pro::messages.current_map') }}: {{ $currentMap }}">
                         <span class="push-chip-icon">
                             <svg class="push-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" x2="9" y1="3" y2="18"/><line x1="15" x2="15" y1="6" y2="21"/></svg>
                         </span>
@@ -89,7 +89,7 @@
                     <button type="button" 
                             class="push-chip push-players-chip" 
                             @click="showPlayersModal = true" 
-                            title="Игроки онлайн (нажмите для просмотра списка)">
+                            title="{{ __('server-layout-pro::messages.players_online_tooltip') }}">
                         <span class="push-chip-icon">
                             <svg class="push-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                         </span>
@@ -101,16 +101,16 @@
             <!-- Right side of Top Row: Live Indicators + Power Actions -->
             <div class="push-top-right">
                 <div class="push-resources">
-                    <div class="push-res-item" title="Загрузка процессора">
+                    <div class="push-res-item" title="{{ __('server-layout-pro::messages.cpu_usage') }}">
                         <span class="push-res-label">CPU</span>
                         <span class="push-res-val" id="pelican-header-cpu">{{ $curCpu }} / {{ $maxCpu }}</span>
                     </div>
-                    <div class="push-res-item" title="Использование памяти">
+                    <div class="push-res-item" title="{{ __('server-layout-pro::messages.memory_usage') }}">
                         <span class="push-res-label">RAM</span>
                         <span class="push-res-val" id="pelican-header-ram">{{ $curRam }} / {{ $maxMem }}</span>
                     </div>
-                    <div class="push-res-item" title="Использование диска">
-                        <span class="push-res-label">Диск</span>
+                    <div class="push-res-item" title="{{ __('server-layout-pro::messages.disk_usage') }}">
+                        <span class="push-res-label">{{ __('server-layout-pro::messages.disk') }}</span>
                         <span class="push-res-val" id="pelican-header-disk">{{ $curDisk }} / {{ $maxDisk }}</span>
                     </div>
                 </div>
@@ -152,11 +152,11 @@
                             <svg class="push-svg-modal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                         </span>
                         <div>
-                            <h3>Игроки онлайн — {{ $server->name }}</h3>
+                            <h3>{{ __('server-layout-pro::messages.players_online') }} — {{ $server->name }}</h3>
                             <div class="push-modal-subtitle">
-                                <span><strong>Карта:</strong> {{ $currentMap }}</span>
+                                <span><strong>{{ __('server-layout-pro::messages.map') }}:</strong> {{ $currentMap }}</span>
                                 @if($ip)
-                                    <span style="margin-left: 10px;"><strong>Адрес:</strong> {{ $ip }}</span>
+                                    <span style="margin-left: 10px;"><strong>{{ __('server-layout-pro::messages.address') }}:</strong> {{ $ip }}</span>
                                 @endif
                             </div>
                         </div>
@@ -165,14 +165,14 @@
                         <button type="button" 
                                 class="push-modal-refresh-btn" 
                                 wire:click="refreshServerQuery" 
-                                title="Обновить список игроков">
+                                title="{{ __('server-layout-pro::messages.refresh_players') }}">
                             <svg class="push-svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
-                            Обновить
+                            {{ __('server-layout-pro::messages.refresh') }}
                         </button>
                         <button type="button" 
                                 class="push-modal-close-btn" 
                                 @click="showPlayersModal = false" 
-                                title="Закрыть">
+                                title="{{ __('server-layout-pro::messages.close') }}">
                             &times;
                         </button>
                     </div>
@@ -185,9 +185,9 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 45px; text-align: center;">#</th>
-                                        <th>Никнейм игрока</th>
-                                        <th style="width: 100px; text-align: right;">Счёт</th>
-                                        <th style="width: 130px; text-align: right;">Время в игре</th>
+                                        <th>{{ __('server-layout-pro::messages.player_nickname') }}</th>
+                                        <th style="width: 100px; text-align: right;">{{ __('server-layout-pro::messages.score') }}</th>
+                                        <th style="width: 130px; text-align: right;">{{ __('server-layout-pro::messages.time_in_game') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -203,15 +203,15 @@
                             </table>
                         </div>
                         <div class="push-modal-footer-stats">
-                            Всего игроков онлайн: <strong>{{ count($playersList) }}</strong> из <strong>{{ $maxPlayers }}</strong>
+                            {{ __('server-layout-pro::messages.total_players_online') }}: <strong>{{ count($playersList) }}</strong> {{ __('server-layout-pro::messages.of') }} <strong>{{ $maxPlayers }}</strong>
                         </div>
                     @else
                         <div class="push-modal-empty">
                             <span class="push-empty-svg-wrap">
                                 <svg class="push-empty-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="23" x2="17" y1="11" y2="11"/></svg>
                             </span>
-                            <h4>На сервере сейчас нет игроков</h4>
-                            <p>Когда игроки подключатся к серверу, их имена, счёт и время появятся здесь автоматически.</p>
+                            <h4>{{ __('server-layout-pro::messages.no_players') }}</h4>
+                            <p>{{ __('server-layout-pro::messages.no_players_desc') }}</p>
                         </div>
                     @endif
                 </div>

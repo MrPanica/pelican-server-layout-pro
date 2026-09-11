@@ -21,7 +21,7 @@ class PelicanServerLayoutProPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        $version = '1.0.3';
+        $version = '1.0.4';
 
         if ($panel->getId() === 'server') {
 
@@ -34,10 +34,12 @@ class PelicanServerLayoutProPlugin implements Plugin
                 PanelsRenderHook::HEAD_END,
                 function () use ($version) {
                     $config = $this->loadConfig();
+                    $i18n = trans('server-layout-pro::messages');
                     return new HtmlString(
                         '<link rel="stylesheet" href="/plugins/pelican-server-layout-pro/css/layout-pro.css?v=' . $version . '&t=' . time() . '">' . "\n" .
                         '<script>' . "\n" .
                         'window.PelicanServerLayoutConfig = ' . json_encode($config) . ';' . "\n" .
+                        'window.PelicanServerLayoutI18n = ' . json_encode($i18n) . ';' . "\n" .
                         '</script>'
                     );
                 }

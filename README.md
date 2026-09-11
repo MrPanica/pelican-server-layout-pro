@@ -48,6 +48,16 @@ An ergonomic, high-performance two-column dashboard layout plugin for **Pelican 
 
 ## 🚀 Installation / Установка
 
+### ⚡ 1-Click Install via URL (Recommended) / Установка по ссылке
+In Pelican Admin Panel -> **Plugins** -> click **«Import»** / **«Add Plugin»**, enter the URL:
+```text
+https://github.com/MrPanica/pelican-server-layout-pro/archive/refs/heads/master.zip
+```
+Click **Install**. Pelican Panel will automatically download, unpack, and activate the plugin!
+
+---
+
+### 💻 Manual CLI Installation / Ручная установка через консоль
 ```bash
 # Clone into Pelican plugins directory
 cd /var/www/pelican/plugins

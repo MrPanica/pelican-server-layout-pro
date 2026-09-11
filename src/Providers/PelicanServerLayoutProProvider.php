@@ -17,6 +17,7 @@ class PelicanServerLayoutProProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $this->loadTranslationsFrom(__DIR__ . '/../../lang', 'server-layout-pro');
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'server-layout-pro');
 
         $this->publishes([

@@ -29,17 +29,17 @@ class ServerLayoutSettingsPage extends Page implements HasForms
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Настройки';
+        return __('server-layout-pro::messages.nav_group');
     }
 
     public static function getNavigationLabel(): string
     {
-        return 'Server Layout Pro';
+        return __('server-layout-pro::messages.nav_label');
     }
 
     public function getTitle(): string
     {
-        return 'Настройки Server Layout Pro';
+        return __('server-layout-pro::messages.title');
     }
 
     public function mount(): void
@@ -57,49 +57,49 @@ class ServerLayoutSettingsPage extends Page implements HasForms
     public function form(Schema $schema): Schema
     {
         $chartOptions = [
-            'cpu' => 'Нагрузка CPU (Процессор)',
-            'memory' => 'Память (RAM)',
-            'players' => 'Онлайн игроков (Players)',
-            'network' => 'Сетевой трафик (Network In/Out)',
-            'disk' => 'Дисковое пространство (Disk)',
+            'cpu' => __('server-layout-pro::messages.chart_cpu'),
+            'memory' => __('server-layout-pro::messages.chart_memory'),
+            'players' => __('server-layout-pro::messages.chart_players'),
+            'network' => __('server-layout-pro::messages.chart_network'),
+            'disk' => __('server-layout-pro::messages.chart_disk'),
         ];
 
         return $schema
             ->components([
-                Section::make('Общий интерфейс')
-                    ->description('Управление структурой страницы сервера')
+                Section::make(__('server-layout-pro::messages.section_general'))
+                    ->description(__('server-layout-pro::messages.section_general_desc'))
                     ->schema([
                         Toggle::make('hide_sidebar')
-                            ->label('Скрыть боковое меню (Sidebar) на страницах сервера')
-                            ->helperText('Включает современное полноэкранное отображение с верхней строкой навигации и быстрым переключением серверов.')
+                            ->label(__('server-layout-pro::messages.field_hide_sidebar'))
+                            ->helperText(__('server-layout-pro::messages.field_hide_sidebar_help'))
                             ->default(true),
                         Toggle::make('show_uptime_button')
-                            ->label('Отображать живой аптайм на кнопке «Включён / Старт»')
-                            ->helperText('Показывает точное время непрерывной работы сервера прямо на главной кнопке управления питанием.')
+                            ->label(__('server-layout-pro::messages.field_show_uptime_button'))
+                            ->helperText(__('server-layout-pro::messages.field_show_uptime_button_help'))
                             ->default(true),
                     ])->columns(2),
 
-                Section::make('Порядок и распределение графиков (Консоль слева, 3 графика справа)')
-                    ->description('Выберите, какие именно графики будут отображаться в правой колонке рядом с консолью (сверху вниз)')
+                Section::make(__('server-layout-pro::messages.section_charts'))
+                    ->description(__('server-layout-pro::messages.section_charts_desc'))
                     ->schema([
                         Select::make('side_chart_1')
-                            ->label('График №1 справа (верхний)')
+                            ->label(__('server-layout-pro::messages.field_side_chart_1'))
                             ->options($chartOptions)
                             ->default('cpu')
                             ->required(),
                         Select::make('side_chart_2')
-                            ->label('График №2 справа (средний)')
+                            ->label(__('server-layout-pro::messages.field_side_chart_2'))
                             ->options($chartOptions)
                             ->default('memory')
                             ->required(),
                         Select::make('side_chart_3')
-                            ->label('График №3 справа (нижний)')
+                            ->label(__('server-layout-pro::messages.field_side_chart_3'))
                             ->options($chartOptions)
                             ->default('players')
                             ->required(),
                         CheckboxList::make('bottom_charts')
-                            ->label('Графики в нижнем ряду под консолью')
-                            ->helperText('Эти графики распределяются по всей ширине в один ряд под консолью.')
+                            ->label(__('server-layout-pro::messages.field_bottom_charts'))
+                            ->helperText(__('server-layout-pro::messages.field_bottom_charts_help'))
                             ->options($chartOptions)
                             ->default(['network', 'disk']),
                     ])->columns(3),
@@ -116,7 +116,7 @@ class ServerLayoutSettingsPage extends Page implements HasForms
         }
 
         Notification::make()
-            ->title('Настройки Server Layout Pro успешно сохранены!')
+            ->title(__('server-layout-pro::messages.saved_notification'))
             ->success()
             ->send();
     }

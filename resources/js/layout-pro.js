@@ -13,6 +13,11 @@
         show_uptime_button: true
     };
 
+    const i18n = window.PelicanServerLayoutI18n || {};
+    function __(key, fallback) {
+        return (i18n && typeof i18n[key] === 'string') ? i18n[key] : fallback;
+    }
+
     if (config.hide_sidebar) {
         document.body.classList.add('pelican-hide-sidebar');
     }
@@ -28,7 +33,12 @@
     }
 
     function formatUptime(uptimeMs) {
-        if (!uptimeMs || uptimeMs <= 0) return '0с';
+        const uD = __('unit_day', 'д');
+        const uH = __('unit_hour', 'ч');
+        const uM = __('unit_min', 'м');
+        const uS = __('unit_sec', 'с');
+
+        if (!uptimeMs || uptimeMs <= 0) return `0${uS}`;
         let seconds = Math.floor(uptimeMs >= 1000 ? uptimeMs / 1000 : uptimeMs);
         const days = Math.floor(seconds / 86400);
         seconds %= 86400;
@@ -37,10 +47,10 @@
         const minutes = Math.floor(seconds / 60);
         const secs = seconds % 60;
 
-        if (days > 0) return `${days}д ${hours}ч ${minutes}м`;
-        if (hours > 0) return `${hours}ч ${minutes}м`;
-        if (minutes > 0) return `${minutes}м ${secs}с`;
-        return `${secs}с`;
+        if (days > 0) return `${days}${uD} ${hours}${uH} ${minutes}${uM}`;
+        if (hours > 0) return `${hours}${uH} ${minutes}${uM}`;
+        if (minutes > 0) return `${minutes}${uM} ${secs}${uS}`;
+        return `${secs}${uS}`;
     }
 
     // --- 2. MOUNT POWER ACTIONS TO TOPBAR ---
@@ -149,7 +159,7 @@
                     const textSpan = copyBtn.querySelector('.push-ip-text');
                     if (textSpan) {
                         const orig = textSpan.textContent;
-                        textSpan.textContent = 'Скопировано!';
+                        textSpan.textContent = __('copied', 'Скопировано!');
                         setTimeout(() => textSpan.textContent = orig, 1200);
                     }
                 });
