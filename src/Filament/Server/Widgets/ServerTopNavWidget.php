@@ -48,6 +48,28 @@ class ServerTopNavWidget extends Widget
         }
     }
 
+    
+    public function mountAction(string $name, array $arguments = [], array $context = []): mixed
+    {
+        if (in_array($name, ['start', 'restart', 'stop', 'kill'])) {
+            /** @var Server|null $server */
+            $server = \Filament\Facades\Filament::getTenant();
+            if ($server instanceof Server) {
+                $user = \Filament\Facades\Filament::auth()->user() ?? \Illuminate\Support\Facades\Auth::user();
+                $permission = match ($name) {
+                    'start' => \App\Enums\SubuserPermission::ControlStart,
+                    'restart' => \App\Enums\SubuserPermission::ControlRestart,
+                    'stop', 'kill' => \App\Enums\SubuserPermission::ControlStop,
+                    default => null,
+                };
+                if (!$permission || $user?->can($permission, $server)) {
+                    $this->dispatch('setServerState', uuid: $server->uuid, state: $name);
+                }
+            }
+        }
+        return null;
+    }
+
     protected function getViewData(): array
     {
         /** @var Server|null $server */

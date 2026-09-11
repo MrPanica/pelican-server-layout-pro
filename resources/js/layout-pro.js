@@ -45,27 +45,81 @@
 
     // --- 2. MOUNT POWER ACTIONS TO TOPBAR ---
     function mountPowerActions() {
-        const target = document.getElementById('pelican-nav-power-actions');
+        const target = document.getElementById("pelican-nav-power-actions");
         if (!target) return;
 
-        // If target already contains button group(s), clean up any extras and exit
-        const existingGroups = target.querySelectorAll('.fi-btn-group');
-        if (existingGroups.length > 0) {
-            for (let i = 1; i < existingGroups.length; i++) {
-                existingGroups[i].remove();
-            }
+        // Find the real power button group rendered on the Console page
+        const realGroup = document.querySelector(".fi-header .fi-btn-group, .fi-page-header-actions .fi-btn-group, .fi-header-actions-ctn .fi-btn-group");
+        if (!realGroup || target.contains(realGroup)) {
             return;
         }
 
-        // Search for powerGroup outside target
-        const powerGroups = document.querySelectorAll('.fi-header-actions-ctn .fi-btn-group, .fi-header .fi-btn-group, .fi-ac .fi-btn-group, .fi-page-header-actions .fi-btn-group');
-        for (const pg of powerGroups) {
-            if (!target.contains(pg)) {
-                target.innerHTML = '';
-                target.appendChild(pg);
-                break;
-            }
+        const realButtons = Array.from(realGroup.querySelectorAll("button"));
+        if (realButtons.length === 0) return;
+
+        // Reconcile proxy button group
+        let proxyGroup = target.querySelector(".fi-btn-group-proxy");
+        if (!proxyGroup) {
+            target.innerHTML = "";
+            proxyGroup = document.createElement("div");
+            proxyGroup.className = "fi-btn-group fi-btn-group-proxy";
+            target.appendChild(proxyGroup);
         }
+
+        realButtons.forEach((realBtn, index) => {
+            let proxyBtn = proxyGroup.querySelector(`[data-proxy-idx="${index}"]`);
+            if (!proxyBtn) {
+                proxyBtn = document.createElement("button");
+                proxyBtn.type = "button";
+                proxyBtn.setAttribute("data-proxy-idx", index);
+
+                // Prevent Livewire event bubbling to the widget; forward to real Page action button
+                proxyBtn.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!realBtn.disabled) {
+                        realBtn.click();
+                    }
+                });
+
+                proxyGroup.appendChild(proxyBtn);
+            }
+
+            // Synchronize visual state
+            proxyBtn.className = realBtn.className;
+            proxyBtn.disabled = realBtn.disabled;
+            if (realBtn.hasAttribute("style")) {
+                proxyBtn.setAttribute("style", realBtn.getAttribute("style"));
+            } else {
+                proxyBtn.removeAttribute("style");
+            }
+            if (realBtn.title) {
+                proxyBtn.title = realBtn.title;
+            }
+
+            // Sync inner content preserving uptime badge if present
+            const uptimeSpan = proxyBtn.querySelector(".pelican-btn-uptime");
+            proxyBtn.innerHTML = realBtn.innerHTML;
+            if (uptimeSpan && !proxyBtn.querySelector(".pelican-btn-uptime")) {
+                proxyBtn.appendChild(uptimeSpan);
+            }
+
+            // Strip wire:* attributes from proxy so Livewire never captures it
+            for (const attr of Array.from(proxyBtn.attributes)) {
+                if (attr.name.startsWith("wire:")) {
+                    proxyBtn.removeAttribute(attr.name);
+                }
+            }
+        });
+
+        // Remove extra proxies if button count decreased
+        const existingProxies = proxyGroup.querySelectorAll("[data-proxy-idx]");
+        existingProxies.forEach(p => {
+            const idx = parseInt(p.getAttribute("data-proxy-idx"), 10);
+            if (idx >= realButtons.length) {
+                p.remove();
+            }
+        });
     }
 
     // --- 3. COPY IP CHIP ---

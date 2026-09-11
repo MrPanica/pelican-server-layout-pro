@@ -14,9 +14,19 @@
 .fi-console-page .fi-wi-stats-overview,
 .fi-console-page [wire\:name*="ServerPlayerWidget"],
 .fi-console-page [wire\:name*="ServerOverview"],
-.fi-console-page div:has(.fi-wi-stats-overview),
-.fi-console-page .fi-header {
+.fi-console-page div:has(.fi-wi-stats-overview) {
     display: none !important;
+}
+
+.fi-console-page .fi-header {
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
 }
 
 /* 3. Hide Left Sidebar on Server Panel for modern fluid experience */
