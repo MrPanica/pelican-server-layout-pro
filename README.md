@@ -6,6 +6,20 @@ An ergonomic, high-performance two-column dashboard layout plugin for **Pelican 
 
 ---
 
+## 📸 Screenshots / Скриншоты
+
+### Ergonomic 2-Column Dashboard & Compact Status Bar / Двухколоночный интерфейс и статус-бар
+![Server Layout Pro — Overview Dashboard](screenshots/01_server_layout_pro_overview.png)
+*Full-height console viewport, stacked real-time metrics, node server switcher, map badge, and power controls.*  
+*Полноразмерное окно консоли, графики метрик, быстрый переключатель серверов, бейдж карты и кнопки управления питанием.*
+
+### Interactive Online Players Modal (A2S Query) / Модальное окно игроков онлайн
+![Server Layout Pro — Players Modal](screenshots/02_server_layout_pro_players_modal.png)
+*Live query of connected players with connection duration, score, and Steam IDs sorted by session length.*  
+*Детальный список игроков в реальном времени с временем на сервере, очками и Steam ID.*
+
+---
+
 ## ✨ Features (English)
 
 - **Ergonomic 2-Column Grid Layout**:
