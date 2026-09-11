@@ -46,14 +46,45 @@ An ergonomic, high-performance two-column dashboard layout plugin for **Pelican 
 
 ---
 
-## 🚀 Installation / Установка
+## 🚀 Installation & Updates / Установка и обновление
 
-### ⚡ 1-Click Install via URL (Recommended) / Установка по ссылке
-In Pelican Admin Panel -> **Plugins** -> click **«Import»** / **«Add Plugin»**, enter the URL:
-```text
-https://github.com/MrPanica/pelican-server-layout-pro/archive/refs/heads/master.zip
-```
-Click **Install**. Pelican Panel will automatically download, unpack, and activate the plugin!
+### ⚡ 1-Click Install via URL (Recommended) / Установка по ссылке (Рекомендуется)
+#### English:
+1. In Pelican Admin Panel navigate to **Plugins** (`/admin/plugins`).
+2. Click the **«Import from URL»** or **«Import»** button.
+3. Enter the direct `.zip` archive URL:
+   ```text
+   https://github.com/MrPanica/pelican-server-layout-pro/archive/refs/heads/master.zip
+   ```
+4. Click **Install**. Pelican Panel will automatically download, extract, publish assets, and activate the plugin!
+
+#### На русском:
+1. В панели управления Pelican перейдите в **Админка ➔ Плагины** (`/admin/plugins`).
+2. Нажмите кнопку **«Импорт»** / **«Импорт по URL»** (иконка глобуса).
+3. Вставьте прямую ссылку на архив `.zip`:
+   ```text
+   https://github.com/MrPanica/pelican-server-layout-pro/archive/refs/heads/master.zip
+   ```
+4. Нажмите **Установить (Install)**. Панель Pelican автоматически скачает, распакует, опубликует веб-ассеты и активирует плагин!
+
+---
+
+### 🔄 Automatic Updates / Автоматические обновления
+- **Native Pelican Update Engine / Встроенный механизм обновлений**:
+  - The plugin natively supports Pelican's update engine via `update.json`. When a new release is pushed to GitHub, Pelican displays an update notification badge and an **«Update»** button in **Admin ➔ Plugins**.
+  - Плагин нативно интегрирован с системой обновлений Pelican через `update.json`. При публикации новой версии на GitHub в панели управления в разделе «Плагины» появится уведомление и кнопка **«Обновить»** для обновления в 1 клик.
+- **CLI Update Command / Обновление через консоль**:
+  ```bash
+  cd /var/www/pelican
+  php artisan p:plugin:update pelican-server-layout-pro
+  ```
+
+---
+
+### 🌐 Multi-Language Support / Локализация
+- **Bilingual Interface (EN / RU)**: Full support for **English (`en`)** and **Russian (`ru`)**.
+- **Automatic Panel Locale Sync**: Interface language automatically mirrors Pelican Panel's current system locale (`app()->getLocale()`). No manual switching or browser extensions needed.
+- **Автоматическая синхронизация языка**: Язык плагина автоматически подтягивается из текущего языка панели Pelican.
 
 ---
 
@@ -63,11 +94,11 @@ Click **Install**. Pelican Panel will automatically download, unpack, and activa
 cd /var/www/pelican/plugins
 git clone https://github.com/MrPanica/pelican-server-layout-pro.git
 
-# Publish assets and clear cache
+# Set permissions and publish assets
+chown -R www-data:www-data /var/www/pelican/plugins/pelican-server-layout-pro
 cd /var/www/pelican
 php artisan filament:assets
-php artisan view:clear
-php artisan cache:clear
+php artisan optimize:clear
 ```
 
 ## 📄 License
