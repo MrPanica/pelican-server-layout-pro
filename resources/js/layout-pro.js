@@ -1,7 +1,7 @@
 /**
  * Pelican Server Layout Pro
  * Dynamic Chart Ordering, Topbar Mount & Telemetry Suite
- * Version 1.0.2
+ * Version 1.0.3
  */
 (function () {
     const config = window.PelicanServerLayoutConfig || {
@@ -29,7 +29,7 @@
 
     function formatUptime(uptimeMs) {
         if (!uptimeMs || uptimeMs <= 0) return '0с';
-        let seconds = Math.floor(uptimeMs > 100000 ? uptimeMs / 1000 : uptimeMs);
+        let seconds = Math.floor(uptimeMs >= 1000 ? uptimeMs / 1000 : uptimeMs);
         const days = Math.floor(seconds / 86400);
         seconds %= 86400;
         const hours = Math.floor(seconds / 3600);
@@ -56,6 +56,11 @@
 
         const realButtons = Array.from(realGroup.querySelectorAll("button"));
         if (realButtons.length === 0) return;
+
+        // Ensure real header buttons never retain an uptime badge
+        realButtons.forEach(btn => {
+            btn.querySelectorAll('.pelican-btn-uptime').forEach(el => el.remove());
+        });
 
         // Reconcile proxy button group
         let proxyGroup = target.querySelector(".fi-btn-group-proxy");
@@ -97,11 +102,23 @@
                 proxyBtn.title = realBtn.title;
             }
 
-            // Sync inner content preserving uptime badge if present
-            const uptimeSpan = proxyBtn.querySelector(".pelican-btn-uptime");
-            proxyBtn.innerHTML = realBtn.innerHTML;
-            if (uptimeSpan && !proxyBtn.querySelector(".pelican-btn-uptime")) {
-                proxyBtn.appendChild(uptimeSpan);
+            // Clean HTML of realBtn (defensively strip any uptime span)
+            let cleanHtml = realBtn.innerHTML;
+            if (cleanHtml.includes('pelican-btn-uptime')) {
+                const temp = document.createElement('div');
+                temp.innerHTML = cleanHtml;
+                temp.querySelectorAll('.pelican-btn-uptime').forEach(el => el.remove());
+                cleanHtml = temp.innerHTML;
+            }
+
+            // Only update innerHTML when realBtn HTML actually changes
+            // This prevents destroying the DOM and detaching the uptime badge every 1000ms
+            if (proxyBtn._lastCleanHtml !== cleanHtml) {
+                proxyBtn._lastCleanHtml = cleanHtml;
+                proxyBtn.innerHTML = cleanHtml;
+                if (index === 0 && config.show_uptime_button) {
+                    renderUptimeText();
+                }
             }
 
             // Strip wire:* attributes from proxy so Livewire never captures it
@@ -285,17 +302,28 @@
     function renderUptimeText() {
         if (!config.show_uptime_button) return;
 
-        const startBtn = document.querySelector('#pelican-nav-power-actions .fi-btn-group button:first-child, .fi-btn-group button:first-child');
+        // Clean up real buttons so they never retain any badge
+        const realGroup = document.querySelector(".fi-header .fi-btn-group, .fi-page-header-actions .fi-btn-group, .fi-header-actions-ctn .fi-btn-group");
+        if (realGroup) {
+            realGroup.querySelectorAll('.pelican-btn-uptime').forEach(el => el.remove());
+        }
+
+        // Target proxy start button explicitly (first button in topbar group)
+        const proxyBtn = document.querySelector('#pelican-nav-power-actions .fi-btn-group-proxy button[data-proxy-idx="0"], #pelican-nav-power-actions .fi-btn-group button:first-child');
+        const startBtn = proxyBtn || (realGroup ? realGroup.querySelector('button:first-child') : null);
         if (!startBtn) return;
 
         let uptimeSpan = startBtn.querySelector('.pelican-btn-uptime');
         if (!uptimeSpan) {
             uptimeSpan = document.createElement('span');
             uptimeSpan.className = 'pelican-btn-uptime';
+            uptimeSpan.style.marginLeft = '4px';
+            uptimeSpan.style.opacity = '0.9';
+            uptimeSpan.style.fontSize = '0.85em';
             startBtn.appendChild(uptimeSpan);
         }
 
-        if (currentUptimeMs > 0) {
+        if (currentUptimeMs > 0 && serverState !== 'offline' && serverState !== 'stopped') {
             const str = formatUptime(currentUptimeMs);
             uptimeSpan.textContent = ` (${str})`;
         } else {
@@ -323,7 +351,6 @@
                         const stats = (typeof data.args[0] === 'string') ? JSON.parse(data.args[0]) : data.args[0];
                         updateTelemetry(stats);
                     } else if (data.event === 'status' && data.args) {
-                        if (stats) stats.state = data.args[0];
                         serverState = data.args[0];
                         const dot = document.getElementById('pelican-server-status-dot');
                         if (dot) {
