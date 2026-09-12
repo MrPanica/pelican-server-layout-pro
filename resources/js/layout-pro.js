@@ -267,6 +267,24 @@
         });
     }
 
+    // --- 4.1 ENSURE TOOLTIPS ON ALL CHARTS ---
+    function ensureChartTooltips() {
+        if (typeof Chart === 'undefined') return;
+        document.querySelectorAll('.fi-console-page canvas, .fi-wi-chart canvas, .fi-section canvas').forEach(canvas => {
+            if (canvas.id === 'terminal' || canvas.id === 'pm-history-chart-canvas') return;
+            const chart = (typeof Chart.getChart === 'function') ? Chart.getChart(canvas) : null;
+            if (chart && chart.options && chart.options.plugins) {
+                if (!chart.options.plugins.tooltip || chart.options.plugins.tooltip.enabled === false) {
+                    chart.options.plugins.tooltip = chart.options.plugins.tooltip || {};
+                    chart.options.plugins.tooltip.enabled = true;
+                    chart.options.plugins.tooltip.mode = 'index';
+                    chart.options.plugins.tooltip.intersect = false;
+                    chart.update('none');
+                }
+            }
+        });
+    }
+
     // --- 5. TELEMETRY & LIVE UPTIME TICKER ---
     let currentUptimeMs = 0;
     let serverState = 'unknown';
@@ -380,6 +398,7 @@
     function init() {
         mountPowerActions();
         organizeCharts();
+        ensureChartTooltips();
         hookConsoleSocket();
     }
 
@@ -396,6 +415,7 @@
             window.Livewire.hook('morph.updated', () => {
                 mountPowerActions();
                 organizeCharts();
+                ensureChartTooltips();
             });
         }
     });
@@ -404,6 +424,7 @@
             window.Livewire.hook('morph.updated', () => {
                 mountPowerActions();
                 organizeCharts();
+                ensureChartTooltips();
             });
         } catch (e) {}
     }
