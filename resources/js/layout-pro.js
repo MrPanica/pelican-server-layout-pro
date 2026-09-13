@@ -53,8 +53,15 @@
         return `${secs}${uS}`;
     }
 
+    function isConsolePage() {
+        return !!document.querySelector('.fi-console-page') ||
+               window.location.pathname.endsWith('/console') ||
+               window.location.pathname.includes('/console/');
+    }
+
     // --- 2. MOUNT POWER ACTIONS TO TOPBAR ---
     function mountPowerActions() {
+        if (!isConsolePage()) return;
         const target = document.getElementById("pelican-nav-power-actions");
         if (!target) return;
 
@@ -195,6 +202,7 @@
     }
 
     function organizeCharts() {
+        if (!isConsolePage()) return;
         const grid = document.querySelector('.fi-console-page .fi-wi.fi-grid') || document.querySelector('.fi-wi.fi-grid');
         if (!grid) return;
 
@@ -269,6 +277,7 @@
 
     // --- 4.1 ENSURE TOOLTIPS ON ALL CHARTS ---
     function ensureChartTooltips() {
+        if (!isConsolePage()) return;
         if (typeof Chart === 'undefined') return;
         document.querySelectorAll('.fi-console-page canvas, .fi-wi-chart canvas, .fi-section canvas').forEach(canvas => {
             if (canvas.id === 'terminal' || canvas.id === 'pm-history-chart-canvas') return;
@@ -369,6 +378,7 @@
 
     // --- 6. WEBSOCKET LISTENER ---
     function hookConsoleSocket() {
+        if (!isConsolePage()) return;
         const ws = window._pelicanConsoleSocket;
         if (ws && !ws._layoutHooked) {
             ws._layoutHooked = true;

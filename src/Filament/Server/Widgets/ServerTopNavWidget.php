@@ -104,9 +104,15 @@ class ServerTopNavWidget extends Widget
             $srvStatus = 'offline';
             try {
                 if (!$srv->isSuspended() && !$srv->isInConflictState()) {
-                    $cs = $srv->retrieveStatus();
-                    if (!$cs->isOffline()) {
-                        $srvStatus = ($cs->value === 'starting') ? 'starting' : 'online';
+                    $statusVal = cache()->remember("pelican_srv_status_{$srv->id}", 30, function () use ($srv) {
+                        try {
+                            return $srv->retrieveStatus()->value;
+                        } catch (\Throwable $e) {
+                            return 'offline';
+                        }
+                    });
+                    if ($statusVal !== 'offline' && $statusVal !== 'stopped') {
+                        $srvStatus = ($statusVal === 'starting') ? 'starting' : 'online';
                     }
                 }
             } catch (\Throwable $e) {
@@ -185,9 +191,15 @@ class ServerTopNavWidget extends Widget
         $currentServerStatus = 'offline';
         try {
             if (!$server->isSuspended() && !$server->isInConflictState()) {
-                $cs = $server->retrieveStatus();
-                if (!$cs->isOffline()) {
-                    $currentServerStatus = ($cs->value === 'starting') ? 'starting' : 'online';
+                $curVal = cache()->remember("pelican_srv_status_{$server->id}", 10, function () use ($server) {
+                    try {
+                        return $server->retrieveStatus()->value;
+                    } catch (\Throwable $e) {
+                        return 'offline';
+                    }
+                });
+                if ($curVal !== 'offline' && $curVal !== 'stopped') {
+                    $currentServerStatus = ($curVal === 'starting') ? 'starting' : 'online';
                 }
             }
         } catch (\Throwable $e) {

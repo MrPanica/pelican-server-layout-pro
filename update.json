@@ -1,7 +1,7 @@
 {
     "*": {
-        "version": "1.0.4",
+        "version": "1.0.5",
         "download_url": "https://github.com/MrPanica/pelican-server-layout-pro/archive/refs/heads/master.zip",
-        "changelog": "Added bilingual localization (ru/en) tied to Pelican Panel locale, update_url and 1-click URL installation."
+        "changelog": "Restricted layout modifications to console page only, cached server status queries to avoid Wings blocking."
     }
 }
