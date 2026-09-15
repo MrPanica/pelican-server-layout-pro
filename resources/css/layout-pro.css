@@ -206,7 +206,29 @@ body.pelican-hide-sidebar .fi-topbar {
 .push-dropdown-scrollable {
     max-height: 380px;
     overflow-y: auto;
-    padding-right: 2px;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    padding-right: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.28) rgba(15, 23, 42, 0.6);
+}
+
+.push-dropdown-scrollable::-webkit-scrollbar {
+    width: 6px;
+}
+
+.push-dropdown-scrollable::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.6);
+    border-radius: 4px;
+}
+
+.push-dropdown-scrollable::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 4px;
+}
+
+.push-dropdown-scrollable::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
 }
 
 .push-dropdown-node-group {

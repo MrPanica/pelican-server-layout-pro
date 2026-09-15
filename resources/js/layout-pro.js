@@ -156,6 +156,21 @@
         });
     }
 
+    // --- 2.1 DROPDOWN & MODAL MOUSE WHEEL SCROLLING ---
+    window.addEventListener('wheel', (e) => {
+        const scrollable = e.target.closest('.push-dropdown-scrollable, .push-modal-window');
+        if (scrollable) {
+            const target = scrollable.classList.contains('push-dropdown-scrollable')
+                ? scrollable
+                : (scrollable.querySelector('.push-dropdown-scrollable') || scrollable);
+            if (target && target.scrollHeight > target.clientHeight) {
+                target.scrollTop += e.deltaY;
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }
+    }, { passive: false, capture: true });
+
     // --- 3. COPY IP CHIP ---
     document.addEventListener('click', (e) => {
         const copyBtn = e.target.closest('.push-copy-ip');

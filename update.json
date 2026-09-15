@@ -1,6 +1,6 @@
 {
     "*": {
-        "version": "1.0.5",
+        "version": "1.0.6",
         "download_url": "https://github.com/MrPanica/pelican-server-layout-pro/archive/refs/heads/master.zip",
         "changelog": "Restricted layout modifications to console page only, cached server status queries to avoid Wings blocking."
     }
