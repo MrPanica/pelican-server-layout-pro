@@ -104,7 +104,7 @@ class ServerTopNavWidget extends Widget
             $srvStatus = 'offline';
             try {
                 if (!$srv->isSuspended() && !$srv->isInConflictState()) {
-                    $statusVal = cache()->remember("pelican_srv_status_{$srv->id}", 30, function () use ($srv) {
+                    $statusVal = cache()->remember("pelican_srv_status_{$srv->id}", 120, function () use ($srv) {
                         try {
                             return $srv->retrieveStatus()->value;
                         } catch (\Throwable $e) {

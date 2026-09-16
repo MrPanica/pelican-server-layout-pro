@@ -158,7 +158,9 @@
 
     // --- 2.1 DROPDOWN & MODAL MOUSE WHEEL SCROLLING ---
     window.addEventListener('wheel', (e) => {
-        const scrollable = e.target.closest('.push-dropdown-scrollable, .push-modal-window');
+        const scrollable = (e.target && typeof e.target.closest === 'function')
+            ? e.target.closest('.push-dropdown-scrollable, .push-modal-window')
+            : null;
         if (scrollable) {
             const target = scrollable.classList.contains('push-dropdown-scrollable')
                 ? scrollable
@@ -173,7 +175,9 @@
 
     // --- 3. COPY IP CHIP ---
     document.addEventListener('click', (e) => {
-        const copyBtn = e.target.closest('.push-copy-ip');
+        const copyBtn = (e.target && typeof e.target.closest === 'function')
+            ? e.target.closest('.push-copy-ip')
+            : null;
         if (copyBtn) {
             const val = copyBtn.getAttribute('data-copy');
             if (val && navigator.clipboard) {
