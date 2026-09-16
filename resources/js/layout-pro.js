@@ -95,16 +95,50 @@
                 proxyBtn.type = "button";
                 proxyBtn.setAttribute("data-proxy-idx", index);
 
-                // Prevent Livewire event bubbling to the widget; forward to real Page action button
+                // Prevent Livewire event bubbling to the widget; forward dynamically to current real button
                 proxyBtn.addEventListener("click", (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (!realBtn.disabled) {
-                        realBtn.click();
+
+                    const currentRealGroup = document.querySelector(".fi-header .fi-btn-group, .fi-page-header-actions .fi-btn-group, .fi-header-actions-ctn .fi-btn-group");
+                    if (!currentRealGroup) return;
+
+                    const currentRealButtons = Array.from(currentRealGroup.querySelectorAll("button"));
+                    const myIdx = parseInt(proxyBtn.getAttribute("data-proxy-idx"), 10);
+                    const act = proxyBtn.getAttribute("data-action-name");
+
+                    let targetBtn = null;
+                    if (act) {
+                        targetBtn = currentRealButtons.find(b => {
+                            const wc = b.getAttribute("wire:click") || b.getAttribute("wire:target") || "";
+                            return wc.includes(`mountAction('${act}'`);
+                        });
+                    }
+
+                    if (!targetBtn) {
+                        targetBtn = currentRealButtons[myIdx];
+                    }
+
+                    if (targetBtn && !targetBtn.disabled) {
+                        targetBtn.dispatchEvent(new MouseEvent("click", {
+                            bubbles: true,
+                            cancelable: true,
+                            view: window
+                        }));
+                        targetBtn.click();
                     }
                 });
 
                 proxyGroup.appendChild(proxyBtn);
+            }
+
+            // Detect action name from wire:click or wire:target (e.g. 'start', 'restart', 'stop', 'kill')
+            const wireAttr = realBtn.getAttribute("wire:click") || realBtn.getAttribute("wire:target") || "";
+            const matchAct = wireAttr.match(/mountAction\('([^']+)'/);
+            if (matchAct && matchAct[1]) {
+                proxyBtn.setAttribute("data-action-name", matchAct[1]);
+            } else {
+                proxyBtn.removeAttribute("data-action-name");
             }
 
             // Synchronize visual state

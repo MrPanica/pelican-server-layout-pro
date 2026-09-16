@@ -26,7 +26,11 @@
     height: 0 !important;
     width: 0 !important;
     overflow: hidden !important;
-    pointer-events: none !important;
+}
+
+.fi-console-page .fi-header .fi-btn-group,
+.fi-console-page .fi-header button {
+    pointer-events: auto !important;
 }
 
 /* 3. Hide Left Sidebar on Server Panel for modern fluid experience */
@@ -70,8 +74,18 @@ body.pelican-hide-sidebar .fi-topbar {
     max-width: 100% !important;
 }
 
-.fi-console-page .fi-page-content > div:not(.fi-wi) {
-    display: none !important;
+/* Ensure Livewire Action Modals (e.g. Kill confirmation) are never hidden and overlay correctly */
+.fi-console-page [wire\:partial="action-modals"],
+.fi-console-page [wire\:partial="modals"] {
+    display: contents !important;
+}
+
+.fi-console-page .fi-modal {
+    z-index: 1000000 !important;
+}
+
+.fi-console-page .fi-modal-window-ctn {
+    z-index: 1000001 !important;
 }
 
 .fi-console-page .fi-page-content > .fi-wi.fi-grid {
