@@ -18,9 +18,16 @@
         return (i18n && typeof i18n[key] === 'string') ? i18n[key] : fallback;
     }
 
-    if (config.hide_sidebar) {
-        document.body.classList.add('pelican-hide-sidebar');
+    function applyHideSidebarClass() {
+        if (config.hide_sidebar) {
+            document.documentElement.classList.add('pelican-hide-sidebar');
+            if (document.body) {
+                document.body.classList.add('pelican-hide-sidebar');
+            }
+        }
     }
+
+    applyHideSidebarClass();
 
     // --- 1. UTILITY FUNCTIONS ---
     function formatBytes(bytes) {
@@ -449,6 +456,15 @@
     }
 
     setInterval(init, 1000);
+
+    document.addEventListener('livewire:navigating', () => {
+        applyHideSidebarClass();
+    });
+
+    document.addEventListener('livewire:navigated', () => {
+        applyHideSidebarClass();
+        init();
+    });
 
     document.addEventListener('livewire:initialized', () => {
         if (window.Livewire && window.Livewire.hook) {
