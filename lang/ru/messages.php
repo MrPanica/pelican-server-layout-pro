@@ -63,4 +63,13 @@ return [
     'unit_hour' => 'ч',
     'unit_min' => 'м',
     'unit_sec' => 'с',
+
+    // Подтверждение действий питания
+    'confirm_restart_title' => 'Подтверждение перезагрузки',
+    'confirm_restart_msg' => 'Вы уверены, что хотите перезагрузить сервер <strong>:server</strong>?<br><span style="color:#94a3b8;font-size:12px;">Подключённые игроки будут временно отключены.</span>',
+    'confirm_restart_btn' => 'Перезагрузить сервер',
+    'confirm_stop_title' => 'Подтверждение остановки',
+    'confirm_stop_msg' => 'Вы уверены, что хотите остановить сервер <strong>:server</strong>?<br><span style="color:#94a3b8;font-size:12px;">Игровой процесс и работа сервера будут завершены.</span>',
+    'confirm_stop_btn' => 'Остановить сервер',
+    'cancel' => 'Отмена',
 ];

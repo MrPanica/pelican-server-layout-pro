@@ -127,6 +127,12 @@
                     }
 
                     if (targetBtn && !targetBtn.disabled) {
+                        if (act === 'restart' || act === 'stop') {
+                            window.dispatchEvent(new CustomEvent('pelican-confirm-action', {
+                                detail: { action: act, targetBtn: targetBtn }
+                            }));
+                            return;
+                        }
                         targetBtn.click();
                     }
                 });

@@ -21,7 +21,7 @@ class PelicanServerLayoutProPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        $version = '1.0.10';
+        $version = '1.0.11';
 
         if ($panel->getId() === 'server') {
 
@@ -29,11 +29,7 @@ class PelicanServerLayoutProPlugin implements Plugin
                 PanelsRenderHook::HEAD_START,
                 function () {
                     $config = $this->loadConfig();
-                    if (!($config['hide_sidebar'] ?? true)) {
-                        return '';
-                    }
-
-                    return new HtmlString('<style id="pelican-layout-pro-critical">
+                    $hideSidebarCss = ($config['hide_sidebar'] ?? true) ? '
                         /* Critical Zero-FOUC Sidebar Suppression */
                         .fi-panel-server .fi-sidebar,
                         .fi-panel-server .fi-main-sidebar,
@@ -79,6 +75,66 @@ class PelicanServerLayoutProPlugin implements Plugin
                         html.pelican-hide-sidebar .fi-topbar {
                             inset-inline-start: 0 !important;
                             width: 100% !important;
+                        }
+                    ' : '';
+
+                    return new HtmlString('<style id="pelican-layout-pro-critical">' . $hideSidebarCss . '
+                        /* Critical Zero-FOUC Grid Preload & Chart Placement */
+                        @media (min-width: 1024px) {
+                            .fi-console-page .fi-wi.fi-grid,
+                            .fi-wi.fi-grid {
+                                display: grid !important;
+                                grid-template-columns: repeat(24, minmax(0, 1fr)) !important;
+                                gap: 12px !important;
+                                align-items: start !important;
+                            }
+                            .fi-console-page .fi-wi.fi-grid > div:has(#terminal),
+                            .fi-console-page .fi-wi.fi-grid > div[wire\:key*="ServerConsole"] {
+                                grid-column: 1 / 18 !important;
+                                grid-row: 2 / span 3 !important;
+                                min-height: 630px !important;
+                                height: 630px !important;
+                            }
+                            .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerCpuChart"] {
+                                grid-column: 18 / -1 !important;
+                                grid-row: 2 !important;
+                                height: 202px !important;
+                                min-height: 202px !important;
+                                max-height: 202px !important;
+                                overflow: hidden !important;
+                            }
+                            .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerMemoryChart"] {
+                                grid-column: 18 / -1 !important;
+                                grid-row: 3 !important;
+                                height: 202px !important;
+                                min-height: 202px !important;
+                                max-height: 202px !important;
+                                overflow: hidden !important;
+                            }
+                            .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerPlayersChart"] {
+                                grid-column: 18 / -1 !important;
+                                grid-row: 4 !important;
+                                height: 202px !important;
+                                min-height: 202px !important;
+                                max-height: 202px !important;
+                                overflow: hidden !important;
+                            }
+                            .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerNetworkChart"] {
+                                grid-column: 1 / 13 !important;
+                                grid-row: 5 !important;
+                                height: 202px !important;
+                                min-height: 202px !important;
+                                max-height: 202px !important;
+                                overflow: hidden !important;
+                            }
+                            .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerDiskChart"] {
+                                grid-column: 13 / -1 !important;
+                                grid-row: 5 !important;
+                                height: 202px !important;
+                                min-height: 202px !important;
+                                max-height: 202px !important;
+                                overflow: hidden !important;
+                            }
                         }
                     </style>');
                 }

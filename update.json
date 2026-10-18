@@ -1,7 +1,7 @@
 {
     "*": {
-        "version": "1.0.10",
+        "version": "1.0.11",
         "download_url": "https://github.com/MrPanica/pelican-server-layout-pro/archive/refs/heads/master.zip",
-        "changelog": "Zero-FOUC layout preload: Added early critical CSS in HEAD_START and livewire:navigating/navigated listeners to completely eliminate sidebar flash on page reload and tab switches."
+        "changelog": "Optimized chart proportions (-15% side width for wider console), SSR zero-flash chart placement, and added styled confirmation dialogs for Restart and Stop actions with server name."
     }
 }

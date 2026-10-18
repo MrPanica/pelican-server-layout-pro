@@ -1,7 +1,51 @@
 <x-filament-widgets::widget class="fi-wi-server-layout-pro-header">
     <div class="pelican-unified-server-header" 
-         x-data="{ open: false, showPlayersModal: false }" 
-         @keydown.escape.window="showPlayersModal = false; open = false">
+         x-data="{ 
+             open: false, 
+             showPlayersModal: false,
+             confirmModal: {
+                 show: false,
+                 action: '',
+                 title: '',
+                 message: '',
+                 btnText: '',
+                 btnColor: 'danger',
+                 targetBtn: null
+             },
+             triggerConfirm(act, btn) {
+                 if (act === 'restart') {
+                     this.confirmModal = {
+                         show: true,
+                         action: 'restart',
+                         title: {{ json_encode(__('server-layout-pro::messages.confirm_restart_title')) }},
+                         message: {!! json_encode(__('server-layout-pro::messages.confirm_restart_msg', ['server' => e($server->name)])) !!},
+                         btnText: {{ json_encode(__('server-layout-pro::messages.confirm_restart_btn')) }},
+                         btnColor: 'warning',
+                         targetBtn: btn
+                     };
+                 } else if (act === 'stop') {
+                     this.confirmModal = {
+                         show: true,
+                         action: 'stop',
+                         title: {{ json_encode(__('server-layout-pro::messages.confirm_stop_title')) }},
+                         message: {!! json_encode(__('server-layout-pro::messages.confirm_stop_msg', ['server' => e($server->name)])) !!},
+                         btnText: {{ json_encode(__('server-layout-pro::messages.confirm_stop_btn')) }},
+                         btnColor: 'danger',
+                         targetBtn: btn
+                     };
+                 } else {
+                     if (btn) btn.click();
+                 }
+             },
+             doConfirmAction() {
+                 if (this.confirmModal.targetBtn) {
+                     this.confirmModal.targetBtn.click();
+                 }
+                 this.confirmModal.show = false;
+             }
+         }" 
+         @pelican-confirm-action.window="triggerConfirm($event.detail.action, $event.detail.targetBtn)"
+         @keydown.escape.window="showPlayersModal = false; open = false; confirmModal.show = false">
         
         <!-- Top Row: Left (Identity & Server Meta Chips) & Right (Live Resources + Power Actions) -->
         <div class="push-top-row">
@@ -214,6 +258,58 @@
                             <p>{{ __('server-layout-pro::messages.no_players_desc') }}</p>
                         </div>
                     @endif
+                </div>
+            </div>
+        </div>
+
+        <!-- Power Action Confirmation Modal -->
+        <div class="push-modal-backdrop push-confirm-backdrop" 
+             x-show="confirmModal.show" 
+             x-cloak 
+             style="display: none;"
+             @click.self="confirmModal.show = false">
+            <div class="push-modal-window push-confirm-modal">
+                <div class="push-modal-header push-confirm-header" :class="'push-confirm-' + confirmModal.action">
+                    <div class="push-modal-title">
+                        <span class="push-modal-icon push-confirm-icon">
+                            <template x-if="confirmModal.action === 'restart'">
+                                <svg class="push-svg-modal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #f59e0b;"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                            </template>
+                            <template x-if="confirmModal.action === 'stop'">
+                                <svg class="push-svg-modal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #ef4444;"><rect width="16" height="16" x="4" y="4" rx="2"/></svg>
+                            </template>
+                        </span>
+                        <div>
+                            <h3 x-text="confirmModal.title"></h3>
+                            <div class="push-modal-subtitle">
+                                <span class="push-confirm-server-badge">{{ $server->name }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" 
+                            class="push-modal-close-btn" 
+                            @click="confirmModal.show = false" 
+                            title="{{ __('server-layout-pro::messages.close') }}">
+                        &times;
+                    </button>
+                </div>
+
+                <div class="push-modal-body push-confirm-body">
+                    <p class="push-confirm-message" x-html="confirmModal.message"></p>
+                </div>
+
+                <div class="push-confirm-footer">
+                    <button type="button" 
+                            class="push-confirm-btn-cancel" 
+                            @click="confirmModal.show = false">
+                        {{ __('server-layout-pro::messages.cancel') }}
+                    </button>
+                    <button type="button" 
+                            class="push-confirm-btn-action" 
+                            :class="'push-confirm-btn-' + confirmModal.btnColor"
+                            @click="doConfirmAction()">
+                        <span x-text="confirmModal.btnText"></span>
+                    </button>
                 </div>
             </div>
         </div>

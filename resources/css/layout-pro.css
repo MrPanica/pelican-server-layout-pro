@@ -853,12 +853,12 @@ html.pelican-hide-sidebar .fi-topbar {
     .fi-console-page .fi-wi.fi-grid,
     .fi-wi.fi-grid {
         display: grid !important;
-        grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+        grid-template-columns: repeat(24, minmax(0, 1fr)) !important;
         gap: 12px !important;
         align-items: start !important;
     }
 
-    /* Top Nav Header spans all 12 columns */
+    /* Top Nav Header spans all 24 columns */
     .fi-console-page .fi-wi.fi-grid > .fi-wi-server-layout-pro-header,
     .fi-console-page .fi-wi.fi-grid > div:has(.pelican-unified-server-header),
     .fi-wi.fi-grid > .fi-wi-server-layout-pro-header,
@@ -868,13 +868,13 @@ html.pelican-hide-sidebar .fi-topbar {
         width: 100% !important;
     }
 
-    /* Terminal on Left Column (spans 8 columns, 3 rows high = 630px) */
+    /* Terminal on Left Column (spans 17 columns = 70.83% width, 3 rows high = 630px) */
     .fi-console-page .fi-wi.fi-grid > div:has(#terminal),
     .fi-console-page .fi-wi.fi-grid > div[wire\:id]:has(#terminal),
     .fi-console-page .fi-wi.fi-grid > div[wire\:name*="ServerConsole"],
     .fi-console-page .fi-wi.fi-grid > div[wire\:key*="ServerConsole"],
     .fi-console-page .fi-wi-widget:has(#terminal) {
-        grid-column: 1 / 9 !important;
+        grid-column: 1 / 18 !important;
         grid-row: 2 / span 3 !important;
         min-height: 630px !important;
         height: 630px !important;
@@ -890,9 +890,10 @@ html.pelican-hide-sidebar .fi-topbar {
         height: 100% !important;
     }
 
-    /* 3 Side Charts on Right (4 columns each, rows 2, 3, 4) */
+    /* 3 Side Charts on Right (7 columns = 29.17% width, -15% narrower, rows 2, 3, 4) */
+    .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerCpuChart"]:not(.fi-wi-stats-overview),
     .fi-console-page .fi-wi.fi-grid > .pelican-side-chart-1:not(.fi-wi-stats-overview) {
-        grid-column: 9 / -1 !important;
+        grid-column: 18 / -1 !important;
         grid-row: 2 !important;
         height: 202px !important;
         max-height: 202px !important;
@@ -902,8 +903,9 @@ html.pelican-hide-sidebar .fi-topbar {
         flex-direction: column !important;
     }
 
+    .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerMemoryChart"]:not(.fi-wi-stats-overview),
     .fi-console-page .fi-wi.fi-grid > .pelican-side-chart-2:not(.fi-wi-stats-overview) {
-        grid-column: 9 / -1 !important;
+        grid-column: 18 / -1 !important;
         grid-row: 3 !important;
         height: 202px !important;
         max-height: 202px !important;
@@ -913,8 +915,9 @@ html.pelican-hide-sidebar .fi-topbar {
         flex-direction: column !important;
     }
 
+    .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerPlayersChart"]:not(.fi-wi-stats-overview),
     .fi-console-page .fi-wi.fi-grid > .pelican-side-chart-3:not(.fi-wi-stats-overview) {
-        grid-column: 9 / -1 !important;
+        grid-column: 18 / -1 !important;
         grid-row: 4 !important;
         height: 202px !important;
         max-height: 202px !important;
@@ -924,9 +927,10 @@ html.pelican-hide-sidebar .fi-topbar {
         flex-direction: column !important;
     }
 
-    /* Bottom Charts: In-place direct children of the grid! */
+    /* Bottom Charts: In-place direct children of the grid! (12 columns each = 50% split) */
+    .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerNetworkChart"],
     .fi-console-page .fi-wi.fi-grid > .pelican-bottom-chart-1 {
-        grid-column: 1 / 7 !important;
+        grid-column: 1 / 13 !important;
         grid-row: 5 !important;
         height: 202px !important;
         min-height: 202px !important;
@@ -936,8 +940,9 @@ html.pelican-hide-sidebar .fi-topbar {
         flex-direction: column !important;
     }
 
+    .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerDiskChart"],
     .fi-console-page .fi-wi.fi-grid > .pelican-bottom-chart-2 {
-        grid-column: 7 / -1 !important;
+        grid-column: 13 / -1 !important;
         grid-row: 5 !important;
         height: 202px !important;
         min-height: 202px !important;
@@ -1188,5 +1193,93 @@ html.pelican-hide-sidebar .fi-topbar {
     font-weight: 700 !important;
     margin-left: 3px !important;
     font-family: inherit !important;
+}
+
+/* 7. Power Action Confirmation Modal */
+.push-confirm-modal {
+    max-width: 490px !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+}
+
+.push-confirm-icon {
+    font-size: 26px !important;
+}
+
+.push-confirm-server-badge {
+    display: inline-block;
+    background: rgba(59, 130, 246, 0.14);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    color: #93c5fd;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 11.5px;
+    margin-top: 3px;
+}
+
+.push-confirm-body {
+    padding: 20px 22px !important;
+}
+
+.push-confirm-message {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #e2e8f0;
+}
+
+.push-confirm-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(15, 23, 42, 0.6);
+}
+
+.push-confirm-btn-cancel {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #94a3b8;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.push-confirm-btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #f8fafc;
+}
+
+.push-confirm-btn-action {
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.push-confirm-btn-warning {
+    background: #f59e0b;
+    color: #0f172a;
+}
+
+.push-confirm-btn-warning:hover {
+    background: #d97706;
+}
+
+.push-confirm-btn-danger {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+.push-confirm-btn-danger:hover {
+    background: #dc2626;
 }
 

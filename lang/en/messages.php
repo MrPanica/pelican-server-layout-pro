@@ -63,4 +63,13 @@ return [
     'unit_hour' => 'h',
     'unit_min' => 'm',
     'unit_sec' => 's',
+
+    // Power Actions Confirmation
+    'confirm_restart_title' => 'Confirm Server Restart',
+    'confirm_restart_msg' => 'Are you sure you want to restart server <strong>:server</strong>?<br><span style="color:#94a3b8;font-size:12px;">Connected players will be temporarily disconnected.</span>',
+    'confirm_restart_btn' => 'Restart Server',
+    'confirm_stop_title' => 'Confirm Server Stop',
+    'confirm_stop_msg' => 'Are you sure you want to stop server <strong>:server</strong>?<br><span style="color:#94a3b8;font-size:12px;">The game process will be terminated.</span>',
+    'confirm_stop_btn' => 'Stop Server',
+    'cancel' => 'Cancel',
 ];
