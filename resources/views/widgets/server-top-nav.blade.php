@@ -1,49 +1,61 @@
 <x-filament-widgets::widget class="fi-wi-server-layout-pro-header">
+    <script>
+        if (!window.pelicanUnifiedHeader) {
+            window.pelicanUnifiedHeader = function(serverName) {
+                return { 
+                    open: false, 
+                    showPlayersModal: false,
+                    confirmModal: {
+                        show: false,
+                        action: '',
+                        title: '',
+                        message: '',
+                        btnText: '',
+                        btnColor: 'danger',
+                        targetBtn: null
+                    },
+                    triggerConfirm(act, btn) {
+                        const i18n = window.PelicanServerLayoutI18n || {};
+                        if (act === 'restart') {
+                            const rawMsg = i18n.confirm_restart_msg || 'Are you sure you want to restart server :server?';
+                            const msg = rawMsg.replace(':server', '<strong class="push-confirm-srv-name">' + serverName + '</strong>');
+                            this.confirmModal = {
+                                show: true,
+                                action: 'restart',
+                                title: i18n.confirm_restart_title || 'Confirm Restart',
+                                message: msg,
+                                btnText: i18n.confirm_restart_btn || 'Restart Server',
+                                btnColor: 'warning',
+                                targetBtn: btn
+                            };
+                        } else if (act === 'stop') {
+                            const rawMsg = i18n.confirm_stop_msg || 'Are you sure you want to stop server :server?';
+                            const msg = rawMsg.replace(':server', '<strong class="push-confirm-srv-name">' + serverName + '</strong>');
+                            this.confirmModal = {
+                                show: true,
+                                action: 'stop',
+                                title: i18n.confirm_stop_title || 'Confirm Stop',
+                                message: msg,
+                                btnText: i18n.confirm_stop_btn || 'Stop Server',
+                                btnColor: 'danger',
+                                targetBtn: btn
+                            };
+                        } else {
+                            if (btn) btn.click();
+                        }
+                    },
+                    doConfirmAction() {
+                        if (this.confirmModal.targetBtn) {
+                            this.confirmModal.targetBtn.click();
+                        }
+                        this.confirmModal.show = false;
+                    }
+                };
+            };
+        }
+    </script>
     <div class="pelican-unified-server-header" 
-         x-data="{ 
-             open: false, 
-             showPlayersModal: false,
-             confirmModal: {
-                 show: false,
-                 action: '',
-                 title: '',
-                 message: '',
-                 btnText: '',
-                 btnColor: 'danger',
-                 targetBtn: null
-             },
-             triggerConfirm(act, btn) {
-                 if (act === 'restart') {
-                     this.confirmModal = {
-                         show: true,
-                         action: 'restart',
-                         title: {{ json_encode(__('server-layout-pro::messages.confirm_restart_title')) }},
-                         message: {!! json_encode(__('server-layout-pro::messages.confirm_restart_msg', ['server' => e($server->name)])) !!},
-                         btnText: {{ json_encode(__('server-layout-pro::messages.confirm_restart_btn')) }},
-                         btnColor: 'warning',
-                         targetBtn: btn
-                     };
-                 } else if (act === 'stop') {
-                     this.confirmModal = {
-                         show: true,
-                         action: 'stop',
-                         title: {{ json_encode(__('server-layout-pro::messages.confirm_stop_title')) }},
-                         message: {!! json_encode(__('server-layout-pro::messages.confirm_stop_msg', ['server' => e($server->name)])) !!},
-                         btnText: {{ json_encode(__('server-layout-pro::messages.confirm_stop_btn')) }},
-                         btnColor: 'danger',
-                         targetBtn: btn
-                     };
-                 } else {
-                     if (btn) btn.click();
-                 }
-             },
-             doConfirmAction() {
-                 if (this.confirmModal.targetBtn) {
-                     this.confirmModal.targetBtn.click();
-                 }
-                 this.confirmModal.show = false;
-             }
-         }" 
+         x-data="pelicanUnifiedHeader('{{ addslashes($server->name) }}')" 
          @pelican-confirm-action.window="triggerConfirm($event.detail.action, $event.detail.targetBtn)"
          @keydown.escape.window="showPlayersModal = false; open = false; confirmModal.show = false">
         
