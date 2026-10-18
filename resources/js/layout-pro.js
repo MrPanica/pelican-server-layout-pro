@@ -120,11 +120,6 @@
                     }
 
                     if (targetBtn && !targetBtn.disabled) {
-                        targetBtn.dispatchEvent(new MouseEvent("click", {
-                            bubbles: true,
-                            cancelable: true,
-                            view: window
-                        }));
                         targetBtn.click();
                     }
                 });
@@ -192,13 +187,13 @@
 
     // --- 2.1 DROPDOWN & MODAL MOUSE WHEEL SCROLLING ---
     window.addEventListener('wheel', (e) => {
-        const scrollable = (e.target && typeof e.target.closest === 'function')
-            ? e.target.closest('.push-dropdown-scrollable, .push-modal-window')
+        const menu = (e.target && typeof e.target.closest === 'function')
+            ? e.target.closest('.push-server-dropdown-menu, .push-server-select-wrap, .push-modal-window')
             : null;
-        if (scrollable) {
-            const target = scrollable.classList.contains('push-dropdown-scrollable')
-                ? scrollable
-                : (scrollable.querySelector('.push-dropdown-scrollable') || scrollable);
+        if (menu) {
+            const target = menu.classList.contains('push-dropdown-scrollable')
+                ? menu
+                : (menu.querySelector('.push-dropdown-scrollable') || menu);
             if (target && target.scrollHeight > target.clientHeight) {
                 target.scrollTop += e.deltaY;
                 e.preventDefault();
@@ -227,8 +222,10 @@
         }
     });
 
-    // --- 4. CHART TAGGING & CONFIGURABLE REORDERING ---
+    // --- 4. CHART TAGGING & IN-PLACE GRID POSITIONING ---
     function identifyChartType(widget) {
+        if (!widget) return null;
+
         // Exclude overview widgets explicitly
         if (widget.classList.contains('fi-wi-stats-overview') || 
             widget.querySelector('.fi-wi-stats-overview') ||
@@ -237,11 +234,15 @@
             return null;
         }
 
-        // Must be a chart widget with a canvas or .fi-wi-chart
-        if (!widget.querySelector('canvas') && !widget.classList.contains('fi-wi-chart')) {
-            return null;
-        }
+        const wireKey = (widget.getAttribute('wire:key') || widget.getAttribute('wire:id') || widget.getAttribute('wire:name') || widget.className || '').toLowerCase();
 
+        if (wireKey.includes('cpuchart') || wireKey.includes('servercpu')) return 'cpu';
+        if (wireKey.includes('memorychart') || wireKey.includes('servermemory')) return 'memory';
+        if (wireKey.includes('networkchart') || wireKey.includes('servernetwork')) return 'network';
+        if (wireKey.includes('diskchart') || wireKey.includes('serverdisk')) return 'disk';
+        if (wireKey.includes('playerschart') || wireKey.includes('serverplayers')) return 'players';
+
+        // Fallback to text inspection if wire:key not matched
         const text = (widget.textContent || '').toLowerCase();
         const heading = widget.querySelector('h2, h3, .fi-section-header-heading, .fi-header-heading');
         const hText = heading ? heading.textContent.toLowerCase() : text;
@@ -264,35 +265,16 @@
             ov.style.setProperty('display', 'none', 'important');
         });
 
-        let bottomRow = document.getElementById('pelican-bottom-charts-row');
-        if (!bottomRow) {
-            bottomRow = document.createElement('div');
-            bottomRow.id = 'pelican-bottom-charts-row';
-            bottomRow.className = 'pelican-bottom-charts-row';
-            grid.appendChild(bottomRow);
-        }
-
         const widgets = Array.from(grid.children).filter(c => {
             return !c.querySelector('#terminal') &&
                    !c.classList.contains('fi-wi-server-layout-pro-header') &&
                    !c.querySelector('.pelican-unified-server-header') &&
-                   !c.classList.contains('fi-wi-stats-overview') &&
-                   c.id !== 'pelican-bottom-charts-row';
+                   !c.classList.contains('fi-wi-stats-overview');
         });
 
-        const chartsByType = {};
         widgets.forEach(w => {
             const type = identifyChartType(w);
             if (type) {
-                chartsByType[type] = w;
-                w.setAttribute('data-chart-type', type);
-            }
-        });
-
-        Array.from(bottomRow.children).forEach(w => {
-            const type = identifyChartType(w);
-            if (type) {
-                if (!chartsByType[type]) chartsByType[type] = w;
                 w.setAttribute('data-chart-type', type);
             }
         });
@@ -301,29 +283,25 @@
         const side2 = config.side_chart_2 || 'memory';
         const side3 = config.side_chart_3 || 'players';
 
-        const sideKeys = [side1, side2, side3];
+        const sideMap = {
+            [side1]: 'pelican-side-chart-1',
+            [side2]: 'pelican-side-chart-2',
+            [side3]: 'pelican-side-chart-3',
+        };
 
-        function setSideClass(el, targetClass) {
-            if (!el) return;
-            if (el.parentElement === bottomRow) {
-                grid.insertBefore(el, bottomRow);
-            }
-            ['pelican-side-chart-1', 'pelican-side-chart-2', 'pelican-side-chart-3'].forEach(c => {
-                if (c !== targetClass && el.classList.contains(c)) el.classList.remove(c);
-            });
-            if (!el.classList.contains(targetClass)) el.classList.add(targetClass);
-        }
+        let bottomIdx = 1;
+        widgets.forEach(w => {
+            const type = w.getAttribute('data-chart-type');
+            if (!type) return;
 
-        if (chartsByType[side1]) setSideClass(chartsByType[side1], 'pelican-side-chart-1');
-        if (chartsByType[side2]) setSideClass(chartsByType[side2], 'pelican-side-chart-2');
-        if (chartsByType[side3]) setSideClass(chartsByType[side3], 'pelican-side-chart-3');
+            // Clear previous grid classes
+            w.classList.remove('pelican-side-chart-1', 'pelican-side-chart-2', 'pelican-side-chart-3', 'pelican-bottom-chart', 'pelican-bottom-chart-1', 'pelican-bottom-chart-2');
 
-        Object.keys(chartsByType).forEach(k => {
-            if (!sideKeys.includes(k)) {
-                const w = chartsByType[k];
-                if (w && w.parentElement !== bottomRow) {
-                    bottomRow.appendChild(w);
-                }
+            if (sideMap[type]) {
+                w.classList.add(sideMap[type]);
+            } else {
+                w.classList.add('pelican-bottom-chart', `pelican-bottom-chart-${bottomIdx}`);
+                bottomIdx++;
             }
         });
     }
@@ -341,7 +319,6 @@
                     chart.options.plugins.tooltip.enabled = true;
                     chart.options.plugins.tooltip.mode = 'index';
                     chart.options.plugins.tooltip.intersect = false;
-                    chart.update('none');
                 }
             }
         });

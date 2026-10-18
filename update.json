@@ -1,7 +1,7 @@
 {
     "*": {
-        "version": "1.0.8",
+        "version": "1.0.9",
         "download_url": "https://github.com/MrPanica/pelican-server-layout-pro/archive/refs/heads/master.zip",
-        "changelog": "Fixed Kill button action forwarding and unhid Livewire confirmation action modals."
+        "changelog": "Fixed Filament 5 zero-height chart collapse, removed DOM reparenting to prevent Livewire morph errors, fixed Switch Server dropdown mouse wheel scrolling and restored clean Kill button confirmation modal flow."
     }
 }

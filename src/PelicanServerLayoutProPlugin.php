@@ -21,7 +21,7 @@ class PelicanServerLayoutProPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        $version = '1.0.8';
+        $version = '1.0.9';
 
         if ($panel->getId() === 'server') {
 

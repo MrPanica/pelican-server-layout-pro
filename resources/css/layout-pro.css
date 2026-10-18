@@ -20,12 +20,17 @@
 
 .fi-console-page .fi-header {
     position: absolute !important;
-    left: -9999px !important;
-    top: -9999px !important;
+    left: 0 !important;
+    top: 0 !important;
     opacity: 0 !important;
     height: 0 !important;
     width: 0 !important;
-    overflow: hidden !important;
+    overflow: visible !important;
+    pointer-events: none !important;
+}
+
+.fi-console-page .fi-header > *:not(.fi-modal) {
+    pointer-events: none !important;
 }
 
 .fi-console-page .fi-header .fi-btn-group,
@@ -80,12 +85,17 @@ body.pelican-hide-sidebar .fi-topbar {
     display: contents !important;
 }
 
-.fi-console-page .fi-modal {
-    z-index: 1000000 !important;
+.fi-console-page .fi-modal,
+.fi-modal {
+    z-index: 10000000 !important;
+    pointer-events: auto !important;
 }
 
-.fi-console-page .fi-modal-window-ctn {
-    z-index: 1000001 !important;
+.fi-console-page .fi-modal-window-ctn,
+.fi-modal-window-ctn,
+.fi-modal-window {
+    z-index: 10000001 !important;
+    pointer-events: auto !important;
 }
 
 .fi-console-page .fi-page-content > .fi-wi.fi-grid {
@@ -111,6 +121,8 @@ body.pelican-hide-sidebar .fi-topbar {
     flex-direction: column;
     gap: 8px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    position: relative !important;
+    z-index: 50 !important;
 }
 
 .push-top-row {
@@ -815,34 +827,34 @@ body.pelican-hide-sidebar .fi-topbar {
     color: #cbd5e1;
 }
 
-/* 5. Two-Column Modern Grid (Strictly Aligned) */
+/* 5. Fluid Responsive Grid (Terminal + 3 Side Charts + Bottom Charts) */
 @media (min-width: 1024px) {
     .fi-console-page .fi-wi.fi-grid,
     .fi-wi.fi-grid {
         display: grid !important;
-        grid-template-columns: minmax(0, 1fr) 365px !important;
-        grid-auto-flow: dense !important;
+        grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
         gap: 12px !important;
         align-items: start !important;
     }
 
-    /* Top Nav Header spans both columns */
+    /* Top Nav Header spans all 12 columns */
     .fi-console-page .fi-wi.fi-grid > .fi-wi-server-layout-pro-header,
     .fi-console-page .fi-wi.fi-grid > div:has(.pelican-unified-server-header),
     .fi-wi.fi-grid > .fi-wi-server-layout-pro-header,
     .fi-wi.fi-grid > div:has(.pelican-unified-server-header) {
         grid-column: 1 / -1 !important;
-        grid-row: auto !important;
+        grid-row: 1 !important;
         width: 100% !important;
     }
 
-    /* Terminal on Left Column */
+    /* Terminal on Left Column (spans 8 columns, 3 rows high = 630px) */
     .fi-console-page .fi-wi.fi-grid > div:has(#terminal),
     .fi-console-page .fi-wi.fi-grid > div[wire\:id]:has(#terminal),
     .fi-console-page .fi-wi.fi-grid > div[wire\:name*="ServerConsole"],
+    .fi-console-page .fi-wi.fi-grid > div[wire\:key*="ServerConsole"],
     .fi-console-page .fi-wi-widget:has(#terminal) {
-        grid-column: 1 !important;
-        grid-row: span 3 !important;
+        grid-column: 1 / 9 !important;
+        grid-row: 2 / span 3 !important;
         min-height: 630px !important;
         height: 630px !important;
         max-height: 630px !important;
@@ -857,11 +869,10 @@ body.pelican-hide-sidebar .fi-topbar {
         height: 100% !important;
     }
 
-    /* 3 Side Charts on Right (Order 1, 2, 3) - permanently locked by wire:name and classes */
-    .fi-console-page .fi-wi.fi-grid > [wire\:name*="ServerCpuChart"],
+    /* 3 Side Charts on Right (4 columns each, rows 2, 3, 4) */
     .fi-console-page .fi-wi.fi-grid > .pelican-side-chart-1:not(.fi-wi-stats-overview) {
-        grid-column: 2 !important;
-        order: 1 !important;
+        grid-column: 9 / -1 !important;
+        grid-row: 2 !important;
         height: 202px !important;
         max-height: 202px !important;
         min-height: 202px !important;
@@ -870,10 +881,9 @@ body.pelican-hide-sidebar .fi-topbar {
         flex-direction: column !important;
     }
 
-    .fi-console-page .fi-wi.fi-grid > [wire\:name*="ServerMemoryChart"],
     .fi-console-page .fi-wi.fi-grid > .pelican-side-chart-2:not(.fi-wi-stats-overview) {
-        grid-column: 2 !important;
-        order: 2 !important;
+        grid-column: 9 / -1 !important;
+        grid-row: 3 !important;
         height: 202px !important;
         max-height: 202px !important;
         min-height: 202px !important;
@@ -882,10 +892,9 @@ body.pelican-hide-sidebar .fi-topbar {
         flex-direction: column !important;
     }
 
-    .fi-console-page .fi-wi.fi-grid > [wire\:name*="server-players-chart"],
     .fi-console-page .fi-wi.fi-grid > .pelican-side-chart-3:not(.fi-wi-stats-overview) {
-        grid-column: 2 !important;
-        order: 3 !important;
+        grid-column: 9 / -1 !important;
+        grid-row: 4 !important;
         height: 202px !important;
         max-height: 202px !important;
         min-height: 202px !important;
@@ -894,31 +903,70 @@ body.pelican-hide-sidebar .fi-topbar {
         flex-direction: column !important;
     }
 
-    /* Bottom Charts Row (e.g. Network, Disk) below terminal and side charts */
-    .pelican-bottom-charts-row {
-        grid-column: 1 / -1 !important;
-        display: grid !important;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)) !important;
-        gap: 12px !important;
-        width: 100% !important;
-        margin-top: 4px !important;
-    }
-
-    .pelican-bottom-charts-row > div,
-    .pelican-bottom-charts-row .fi-wi-chart {
+    /* Bottom Charts: In-place direct children of the grid! */
+    .fi-console-page .fi-wi.fi-grid > .pelican-bottom-chart-1 {
+        grid-column: 1 / 7 !important;
+        grid-row: 5 !important;
         height: 202px !important;
         min-height: 202px !important;
         max-height: 202px !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .fi-console-page .fi-wi.fi-grid > .pelican-bottom-chart-2 {
+        grid-column: 7 / -1 !important;
+        grid-row: 5 !important;
+        height: 202px !important;
+        min-height: 202px !important;
+        max-height: 202px !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .fi-console-page .fi-wi.fi-grid > .pelican-bottom-chart:not(.pelican-bottom-chart-1):not(.pelican-bottom-chart-2) {
+        grid-column: 1 / -1 !important;
+        grid-row: auto !important;
+        height: 202px !important;
+        min-height: 202px !important;
+        max-height: 202px !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
     }
 }
 
-/* Universal Chart Card Styling (Matches Reference Screenshot Exactly) */
+@media (max-width: 1023px) {
+    .fi-console-page .fi-wi.fi-grid,
+    .fi-wi.fi-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        width: 100% !important;
+    }
+
+    .fi-console-page .fi-wi.fi-grid > * {
+        width: 100% !important;
+        min-height: 202px !important;
+    }
+
+    .fi-console-page .fi-wi.fi-grid > div:has(#terminal) {
+        min-height: 480px !important;
+        height: 480px !important;
+    }
+}
+
+/* Universal Chart Card Styling */
 .fi-console-page .fi-wi-chart .fi-section,
 .fi-console-page .fi-section:has(canvas),
 .pelican-side-chart-1:not(.fi-wi-stats-overview) .fi-section,
 .pelican-side-chart-2:not(.fi-wi-stats-overview) .fi-section,
 .pelican-side-chart-3:not(.fi-wi-stats-overview) .fi-section,
-.pelican-bottom-charts-row .fi-section {
+.pelican-bottom-chart .fi-section,
+.pelican-bottom-chart-1 .fi-section,
+.pelican-bottom-chart-2 .fi-section {
     background-color: #18191e !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
     border-radius: 12px !important;
@@ -937,7 +985,9 @@ body.pelican-hide-sidebar .fi-topbar {
 .pelican-side-chart-1:not(.fi-wi-stats-overview) .fi-section-header,
 .pelican-side-chart-2:not(.fi-wi-stats-overview) .fi-section-header,
 .pelican-side-chart-3:not(.fi-wi-stats-overview) .fi-section-header,
-.pelican-bottom-charts-row .fi-section-header {
+.pelican-bottom-chart .fi-section-header,
+.pelican-bottom-chart-1 .fi-section-header,
+.pelican-bottom-chart-2 .fi-section-header {
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
@@ -957,7 +1007,9 @@ body.pelican-hide-sidebar .fi-topbar {
 .pelican-side-chart-1:not(.fi-wi-stats-overview) .fi-section-header-heading,
 .pelican-side-chart-2:not(.fi-wi-stats-overview) .fi-section-header-heading,
 .pelican-side-chart-3:not(.fi-wi-stats-overview) .fi-section-header-heading,
-.pelican-bottom-charts-row .fi-section-header-heading {
+.pelican-bottom-chart .fi-section-header-heading,
+.pelican-bottom-chart-1 .fi-section-header-heading,
+.pelican-bottom-chart-2 .fi-section-header-heading {
     color: #ffffff !important;
     font-size: 15px !important;
     font-weight: 700 !important;
@@ -977,7 +1029,9 @@ body.pelican-hide-sidebar .fi-topbar {
 .pelican-side-chart-1:not(.fi-wi-stats-overview) .fi-section-header-actions button,
 .pelican-side-chart-2:not(.fi-wi-stats-overview) .fi-section-header-actions button,
 .pelican-side-chart-3:not(.fi-wi-stats-overview) .fi-section-header-actions button,
-.pelican-bottom-charts-row .fi-section-header-actions button {
+.pelican-bottom-chart .fi-section-header-actions button,
+.pelican-bottom-chart-1 .fi-section-header-actions button,
+.pelican-bottom-chart-2 .fi-section-header-actions button {
     background: rgba(255, 255, 255, 0.04) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     border-radius: 6px !important;
@@ -998,7 +1052,9 @@ body.pelican-hide-sidebar .fi-topbar {
 .pelican-side-chart-1 .fi-section-content-ctn,
 .pelican-side-chart-2 .fi-section-content-ctn,
 .pelican-side-chart-3 .fi-section-content-ctn,
-.pelican-bottom-charts-row .fi-section-content-ctn {
+.pelican-bottom-chart .fi-section-content-ctn,
+.pelican-bottom-chart-1 .fi-section-content-ctn,
+.pelican-bottom-chart-2 .fi-section-content-ctn {
     flex: 1 1 auto !important;
     display: flex !important;
     flex-direction: column !important;
@@ -1016,7 +1072,9 @@ body.pelican-hide-sidebar .fi-topbar {
 .pelican-side-chart-1:not(.fi-wi-stats-overview) .fi-section-content,
 .pelican-side-chart-2:not(.fi-wi-stats-overview) .fi-section-content,
 .pelican-side-chart-3:not(.fi-wi-stats-overview) .fi-section-content,
-.pelican-bottom-charts-row .fi-section-content {
+.pelican-bottom-chart .fi-section-content,
+.pelican-bottom-chart-1 .fi-section-content,
+.pelican-bottom-chart-2 .fi-section-content {
     flex: 1 1 100% !important;
     display: flex !important;
     flex-direction: column !important;
@@ -1031,13 +1089,16 @@ body.pelican-hide-sidebar .fi-topbar {
     overflow: hidden !important;
 }
 
-/* Inner Wrappers (wire:poll div, etc.) */
+/* Inner Wrappers (wire:poll div, .fi-wi-chart-image in Filament 5, etc.) */
 .fi-console-page .fi-wi-chart .fi-section-content > div,
 .fi-console-page .fi-section:has(canvas) .fi-section-content > div,
 .pelican-side-chart-1 .fi-section-content > div,
 .pelican-side-chart-2 .fi-section-content > div,
 .pelican-side-chart-3 .fi-section-content > div,
-.pelican-bottom-charts-row .fi-section-content > div {
+.pelican-bottom-chart .fi-section-content > div,
+.pelican-bottom-chart-1 .fi-section-content > div,
+.pelican-bottom-chart-2 .fi-section-content > div,
+.fi-wi-chart-image {
     flex: 1 1 100% !important;
     display: flex !important;
     flex-direction: column !important;
@@ -1046,8 +1107,10 @@ body.pelican-hide-sidebar .fi-topbar {
     width: 100% !important;
     min-width: 100% !important;
     height: 100% !important;
+    min-height: 140px !important;
     padding: 0 !important;
     margin: 0 !important;
+    position: relative !important;
 }
 
 /* Canvas Container */
@@ -1057,12 +1120,17 @@ body.pelican-hide-sidebar .fi-topbar {
 .pelican-side-chart-1 .fi-wi-chart-canvas-ctn,
 .pelican-side-chart-2 .fi-wi-chart-canvas-ctn,
 .pelican-side-chart-3 .fi-wi-chart-canvas-ctn,
-.pelican-bottom-charts-row .fi-wi-chart-canvas-ctn {
+.pelican-bottom-chart .fi-wi-chart-canvas-ctn,
+.pelican-bottom-chart-1 .fi-wi-chart-canvas-ctn,
+.pelican-bottom-chart-2 .fi-wi-chart-canvas-ctn,
+.fi-wi-chart-canvas-ctn,
+.fi-wi-chart-frame {
     flex: 1 1 100% !important;
     width: 100% !important;
     min-width: 100% !important;
     max-width: 100% !important;
     height: 100% !important;
+    min-height: 140px !important;
     max-height: 100% !important;
     display: block !important;
     position: relative !important;
@@ -1077,7 +1145,9 @@ body.pelican-hide-sidebar .fi-topbar {
 .pelican-side-chart-1:not(.fi-wi-stats-overview) canvas,
 .pelican-side-chart-2:not(.fi-wi-stats-overview) canvas,
 .pelican-side-chart-3:not(.fi-wi-stats-overview) canvas,
-.pelican-bottom-charts-row canvas {
+.pelican-bottom-chart canvas,
+.pelican-bottom-chart-1 canvas,
+.pelican-bottom-chart-2 canvas {
     display: block !important;
     position: absolute !important;
     top: 0 !important;
@@ -1097,31 +1167,5 @@ body.pelican-hide-sidebar .fi-topbar {
     font-weight: 700 !important;
     margin-left: 3px !important;
     font-family: inherit !important;
-}
-
-/* 7. Bottom Charts Row (Network & Disk) */
-.pelican-bottom-charts-row {
-    grid-column: 1 / -1 !important;
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 16px !important;
-    width: 100% !important;
-    margin-top: 14px !important;
-}
-
-@media (max-width: 1024px) {
-    .pelican-bottom-charts-row {
-        grid-template-columns: 1fr !important;
-    }
-}
-
-.pelican-bottom-charts-row > div {
-    width: 100% !important;
-    min-height: 220px !important;
-}
-
-.pelican-bottom-charts-row .fi-section-content {
-    min-height: 160px !important;
-    height: 160px !important;
 }
 
