@@ -892,6 +892,7 @@ html.pelican-hide-sidebar .fi-topbar {
 
     /* 3 Side Charts on Right (7 columns = 29.17% width, -15% narrower, rows 2, 3, 4) */
     .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerCpuChart"]:not(.fi-wi-stats-overview),
+    .fi-console-page .fi-wi.fi-grid > [wire\:name*="ServerCpuChart"]:not(.fi-wi-stats-overview),
     .fi-console-page .fi-wi.fi-grid > .pelican-side-chart-1:not(.fi-wi-stats-overview) {
         grid-column: 18 / -1 !important;
         grid-row: 2 !important;
@@ -904,6 +905,7 @@ html.pelican-hide-sidebar .fi-topbar {
     }
 
     .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerMemoryChart"]:not(.fi-wi-stats-overview),
+    .fi-console-page .fi-wi.fi-grid > [wire\:name*="ServerMemoryChart"]:not(.fi-wi-stats-overview),
     .fi-console-page .fi-wi.fi-grid > .pelican-side-chart-2:not(.fi-wi-stats-overview) {
         grid-column: 18 / -1 !important;
         grid-row: 3 !important;
@@ -916,6 +918,8 @@ html.pelican-hide-sidebar .fi-topbar {
     }
 
     .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerPlayersChart"]:not(.fi-wi-stats-overview),
+    .fi-console-page .fi-wi.fi-grid > [wire\:name*="server-players-chart"]:not(.fi-wi-stats-overview),
+    .fi-console-page .fi-wi.fi-grid > [wire\:name*="ServerPlayersChart"]:not(.fi-wi-stats-overview),
     .fi-console-page .fi-wi.fi-grid > .pelican-side-chart-3:not(.fi-wi-stats-overview) {
         grid-column: 18 / -1 !important;
         grid-row: 4 !important;
@@ -929,6 +933,7 @@ html.pelican-hide-sidebar .fi-topbar {
 
     /* Bottom Charts: In-place direct children of the grid! (12 columns each = 50% split) */
     .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerNetworkChart"],
+    .fi-console-page .fi-wi.fi-grid > [wire\:name*="ServerNetworkChart"],
     .fi-console-page .fi-wi.fi-grid > .pelican-bottom-chart-1 {
         grid-column: 1 / 13 !important;
         grid-row: 5 !important;
@@ -941,6 +946,8 @@ html.pelican-hide-sidebar .fi-topbar {
     }
 
     .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerDiskChart"],
+    .fi-console-page .fi-wi.fi-grid > [wire\:name*="server-disk-chart"],
+    .fi-console-page .fi-wi.fi-grid > [wire\:name*="ServerDiskChart"],
     .fi-console-page .fi-wi.fi-grid > .pelican-bottom-chart-2 {
         grid-column: 13 / -1 !important;
         grid-row: 5 !important;

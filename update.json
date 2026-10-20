@@ -1,7 +1,7 @@
 {
     "*": {
-        "version": "1.0.11",
+        "version": "1.0.12",
         "download_url": "https://github.com/MrPanica/pelican-server-layout-pro/archive/refs/heads/master.zip",
-        "changelog": "Optimized chart proportions (-15% side width for wider console), SSR zero-flash chart placement, and added styled confirmation dialogs for Restart and Stop actions with server name."
+        "changelog": "Zero-FOUC lazy chart hydration: Added wire:name attribute selectors to critical inline CSS and attached a fast MutationObserver on grid to prevent side charts from momentary squishing on reload."
     }
 }

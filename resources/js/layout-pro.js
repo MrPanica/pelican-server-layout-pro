@@ -448,9 +448,44 @@
     });
 
     // --- 7. INITIALIZATION & RECOVERY ---
+    let gridObserver = null;
+    function attachGridObserver() {
+        const grid = document.querySelector('.fi-console-page .fi-wi.fi-grid') || document.querySelector('.fi-wi.fi-grid');
+        if (!grid || grid._layoutObserverAttached) return;
+        grid._layoutObserverAttached = true;
+        if (gridObserver) gridObserver.disconnect();
+        gridObserver = new MutationObserver(() => {
+            organizeCharts();
+            mountPowerActions();
+        });
+        gridObserver.observe(grid, { childList: true, subtree: true, attributes: true, attributeFilter: ['wire:id', 'wire:name', 'class'] });
+    }
+
+    function setupLivewireHooks() {
+        if (!window.Livewire || !window.Livewire.hook || window._pelicanLayoutLivewireHooked) return;
+        window._pelicanLayoutLivewireHooked = true;
+        try {
+            window.Livewire.hook('commit', ({ succeed }) => {
+                succeed(() => {
+                    organizeCharts();
+                    mountPowerActions();
+                    ensureChartTooltips();
+                });
+            });
+            window.Livewire.hook('morph.updated', () => {
+                organizeCharts();
+                mountPowerActions();
+                ensureChartTooltips();
+            });
+        } catch (e) {}
+    }
+
     function init() {
+        applyHideSidebarClass();
         mountPowerActions();
         organizeCharts();
+        attachGridObserver();
+        setupLivewireHooks();
         ensureChartTooltips();
         hookConsoleSocket();
     }
@@ -473,21 +508,8 @@
     });
 
     document.addEventListener('livewire:initialized', () => {
-        if (window.Livewire && window.Livewire.hook) {
-            window.Livewire.hook('morph.updated', () => {
-                mountPowerActions();
-                organizeCharts();
-                ensureChartTooltips();
-            });
-        }
+        setupLivewireHooks();
+        init();
     });
-    if (window.Livewire && window.Livewire.hook) {
-        try {
-            window.Livewire.hook('morph.updated', () => {
-                mountPowerActions();
-                organizeCharts();
-                ensureChartTooltips();
-            });
-        } catch (e) {}
-    }
+    setupLivewireHooks();
 })();
