@@ -1,7 +1,7 @@
 {
     "*": {
-        "version": "1.0.12",
+        "version": "1.0.13",
         "download_url": "https://github.com/MrPanica/pelican-server-layout-pro/archive/refs/heads/master.zip",
-        "changelog": "Zero-FOUC lazy chart hydration: Added wire:name attribute selectors to critical inline CSS and attached a fast MutationObserver on grid to prevent side charts from momentary squishing on reload."
+        "changelog": "Fix infinite loading loop on server console page: eliminated recursive MutationObserver, debounced chart updates with requestAnimationFrame, and scoped grid styles strictly to console page."
     }
 }

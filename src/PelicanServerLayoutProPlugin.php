@@ -21,7 +21,7 @@ class PelicanServerLayoutProPlugin implements Plugin
 
     public function register(Panel $panel): void
     {
-        $version = '1.0.12';
+        $version = '1.0.13';
 
         if ($panel->getId() === 'server') {
 
@@ -89,8 +89,7 @@ class PelicanServerLayoutProPlugin implements Plugin
 
                         /* Critical Zero-FOUC Grid Preload & Chart Placement */
                         @media (min-width: 1024px) {
-                            .fi-console-page .fi-wi.fi-grid,
-                            .fi-wi.fi-grid {
+                            .fi-console-page .fi-wi.fi-grid {
                                 display: grid !important;
                                 grid-template-columns: repeat(24, minmax(0, 1fr)) !important;
                                 gap: 12px !important;
@@ -116,8 +115,6 @@ class PelicanServerLayoutProPlugin implements Plugin
                                 min-height: 202px !important;
                                 max-height: 202px !important;
                                 overflow: hidden !important;
-                                display: flex !important;
-                                flex-direction: column !important;
                             }
                             .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerMemoryChart"],
                             .fi-console-page .fi-wi.fi-grid > [wire\:name*="ServerMemoryChart"],
@@ -128,8 +125,6 @@ class PelicanServerLayoutProPlugin implements Plugin
                                 min-height: 202px !important;
                                 max-height: 202px !important;
                                 overflow: hidden !important;
-                                display: flex !important;
-                                flex-direction: column !important;
                             }
                             .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerPlayersChart"],
                             .fi-console-page .fi-wi.fi-grid > [wire\:name*="server-players-chart"],
@@ -141,8 +136,6 @@ class PelicanServerLayoutProPlugin implements Plugin
                                 min-height: 202px !important;
                                 max-height: 202px !important;
                                 overflow: hidden !important;
-                                display: flex !important;
-                                flex-direction: column !important;
                             }
                             .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerNetworkChart"],
                             .fi-console-page .fi-wi.fi-grid > [wire\:name*="ServerNetworkChart"],
@@ -153,8 +146,6 @@ class PelicanServerLayoutProPlugin implements Plugin
                                 min-height: 202px !important;
                                 max-height: 202px !important;
                                 overflow: hidden !important;
-                                display: flex !important;
-                                flex-direction: column !important;
                             }
                             .fi-console-page .fi-wi.fi-grid > [wire\:key*="ServerDiskChart"],
                             .fi-console-page .fi-wi.fi-grid > [wire\:name*="server-disk-chart"],
@@ -166,8 +157,6 @@ class PelicanServerLayoutProPlugin implements Plugin
                                 min-height: 202px !important;
                                 max-height: 202px !important;
                                 overflow: hidden !important;
-                                display: flex !important;
-                                flex-direction: column !important;
                             }
                         }
                     </style>');

@@ -268,55 +268,82 @@
         return null;
     }
 
+    let isOrganizing = false;
+    let organizeRaf = null;
+
+    function scheduleOrganizeCharts() {
+        if (organizeRaf) return;
+        organizeRaf = requestAnimationFrame(() => {
+            organizeRaf = null;
+            organizeCharts();
+            mountPowerActions();
+            ensureChartTooltips();
+        });
+    }
+
     function organizeCharts() {
         if (!isConsolePage()) return;
-        const grid = document.querySelector('.fi-console-page .fi-wi.fi-grid') || document.querySelector('.fi-wi.fi-grid');
-        if (!grid) return;
+        if (isOrganizing) return;
+        isOrganizing = true;
 
-        // Hide overview widgets completely
-        grid.querySelectorAll('.fi-wi-stats-overview, [wire\\:name*="ServerOverview"], [wire\\:name*="ServerPlayerWidget"]').forEach(ov => {
-            ov.style.setProperty('display', 'none', 'important');
-        });
+        try {
+            const grid = document.querySelector('.fi-console-page .fi-wi.fi-grid') || document.querySelector('.fi-wi.fi-grid');
+            if (!grid) return;
 
-        const widgets = Array.from(grid.children).filter(c => {
-            return !c.querySelector('#terminal') &&
-                   !c.classList.contains('fi-wi-server-layout-pro-header') &&
-                   !c.querySelector('.pelican-unified-server-header') &&
-                   !c.classList.contains('fi-wi-stats-overview');
-        });
+            // Hide overview widgets completely
+            grid.querySelectorAll('.fi-wi-stats-overview, [wire\\:name*="ServerOverview"], [wire\\:name*="ServerPlayerWidget"]').forEach(ov => {
+                if (ov.style.display !== 'none') {
+                    ov.style.setProperty('display', 'none', 'important');
+                }
+            });
 
-        widgets.forEach(w => {
-            const type = identifyChartType(w);
-            if (type) {
-                w.setAttribute('data-chart-type', type);
-            }
-        });
+            const widgets = Array.from(grid.children).filter(c => {
+                return !c.querySelector('#terminal') &&
+                       !c.classList.contains('fi-wi-server-layout-pro-header') &&
+                       !c.querySelector('.pelican-unified-server-header') &&
+                       !c.classList.contains('fi-wi-stats-overview');
+            });
 
-        const side1 = config.side_chart_1 || 'cpu';
-        const side2 = config.side_chart_2 || 'memory';
-        const side3 = config.side_chart_3 || 'players';
+            widgets.forEach(w => {
+                const type = identifyChartType(w);
+                if (type && w.getAttribute('data-chart-type') !== type) {
+                    w.setAttribute('data-chart-type', type);
+                }
+            });
 
-        const sideMap = {
-            [side1]: 'pelican-side-chart-1',
-            [side2]: 'pelican-side-chart-2',
-            [side3]: 'pelican-side-chart-3',
-        };
+            const side1 = config.side_chart_1 || 'cpu';
+            const side2 = config.side_chart_2 || 'memory';
+            const side3 = config.side_chart_3 || 'players';
 
-        let bottomIdx = 1;
-        widgets.forEach(w => {
-            const type = w.getAttribute('data-chart-type');
-            if (!type) return;
+            const sideMap = {
+                [side1]: 'pelican-side-chart-1',
+                [side2]: 'pelican-side-chart-2',
+                [side3]: 'pelican-side-chart-3',
+            };
 
-            // Clear previous grid classes
-            w.classList.remove('pelican-side-chart-1', 'pelican-side-chart-2', 'pelican-side-chart-3', 'pelican-bottom-chart', 'pelican-bottom-chart-1', 'pelican-bottom-chart-2');
+            let bottomIdx = 1;
+            widgets.forEach(w => {
+                const type = w.getAttribute('data-chart-type');
+                if (!type) return;
 
-            if (sideMap[type]) {
-                w.classList.add(sideMap[type]);
-            } else {
-                w.classList.add('pelican-bottom-chart', `pelican-bottom-chart-${bottomIdx}`);
-                bottomIdx++;
-            }
-        });
+                if (sideMap[type]) {
+                    const targetCls = sideMap[type];
+                    if (!w.classList.contains(targetCls)) {
+                        w.classList.remove('pelican-side-chart-1', 'pelican-side-chart-2', 'pelican-side-chart-3', 'pelican-bottom-chart', 'pelican-bottom-chart-1', 'pelican-bottom-chart-2');
+                        w.classList.add(targetCls);
+                    }
+                } else {
+                    const targetCls = `pelican-bottom-chart-${bottomIdx}`;
+                    if (!w.classList.contains(targetCls)) {
+                        w.classList.remove('pelican-side-chart-1', 'pelican-side-chart-2', 'pelican-side-chart-3', 'pelican-bottom-chart', 'pelican-bottom-chart-1', 'pelican-bottom-chart-2');
+                        w.classList.add('pelican-bottom-chart', targetCls);
+                    }
+                    bottomIdx++;
+                }
+            });
+        } finally {
+            isOrganizing = false;
+        }
     }
 
     // --- 4.1 ENSURE TOOLTIPS ON ALL CHARTS ---
@@ -448,34 +475,17 @@
     });
 
     // --- 7. INITIALIZATION & RECOVERY ---
-    let gridObserver = null;
-    function attachGridObserver() {
-        const grid = document.querySelector('.fi-console-page .fi-wi.fi-grid') || document.querySelector('.fi-wi.fi-grid');
-        if (!grid || grid._layoutObserverAttached) return;
-        grid._layoutObserverAttached = true;
-        if (gridObserver) gridObserver.disconnect();
-        gridObserver = new MutationObserver(() => {
-            organizeCharts();
-            mountPowerActions();
-        });
-        gridObserver.observe(grid, { childList: true, subtree: true, attributes: true, attributeFilter: ['wire:id', 'wire:name', 'class'] });
-    }
-
     function setupLivewireHooks() {
         if (!window.Livewire || !window.Livewire.hook || window._pelicanLayoutLivewireHooked) return;
         window._pelicanLayoutLivewireHooked = true;
         try {
             window.Livewire.hook('commit', ({ succeed }) => {
                 succeed(() => {
-                    organizeCharts();
-                    mountPowerActions();
-                    ensureChartTooltips();
+                    scheduleOrganizeCharts();
                 });
             });
             window.Livewire.hook('morph.updated', () => {
-                organizeCharts();
-                mountPowerActions();
-                ensureChartTooltips();
+                scheduleOrganizeCharts();
             });
         } catch (e) {}
     }
@@ -483,10 +493,8 @@
     function init() {
         applyHideSidebarClass();
         mountPowerActions();
-        organizeCharts();
-        attachGridObserver();
+        scheduleOrganizeCharts();
         setupLivewireHooks();
-        ensureChartTooltips();
         hookConsoleSocket();
     }
 

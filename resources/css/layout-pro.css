@@ -850,8 +850,7 @@ html.pelican-hide-sidebar .fi-topbar {
 
 /* 5. Fluid Responsive Grid (Terminal + 3 Side Charts + Bottom Charts) */
 @media (min-width: 1024px) {
-    .fi-console-page .fi-wi.fi-grid,
-    .fi-wi.fi-grid {
+    .fi-console-page .fi-wi.fi-grid {
         display: grid !important;
         grid-template-columns: repeat(24, minmax(0, 1fr)) !important;
         gap: 12px !important;
@@ -860,9 +859,7 @@ html.pelican-hide-sidebar .fi-topbar {
 
     /* Top Nav Header spans all 24 columns */
     .fi-console-page .fi-wi.fi-grid > .fi-wi-server-layout-pro-header,
-    .fi-console-page .fi-wi.fi-grid > div:has(.pelican-unified-server-header),
-    .fi-wi.fi-grid > .fi-wi-server-layout-pro-header,
-    .fi-wi.fi-grid > div:has(.pelican-unified-server-header) {
+    .fi-console-page .fi-wi.fi-grid > div:has(.pelican-unified-server-header) {
         grid-column: 1 / -1 !important;
         grid-row: 1 !important;
         width: 100% !important;
@@ -972,8 +969,7 @@ html.pelican-hide-sidebar .fi-topbar {
 }
 
 @media (max-width: 1023px) {
-    .fi-console-page .fi-wi.fi-grid,
-    .fi-wi.fi-grid {
+    .fi-console-page .fi-wi.fi-grid {
         display: flex !important;
         flex-direction: column !important;
         gap: 12px !important;
